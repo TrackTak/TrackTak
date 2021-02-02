@@ -11,7 +11,10 @@ import getTableRowBackgroundOpacity from "../shared/getTableRowBackgroundOpacity
 import selectIsInUS from "../selectors/fundamentalSelectors/selectIsInUS";
 import selectCurrentIndustry from "../selectors/fundamentalSelectors/selectCurrentIndustry";
 import selectGeneral from "../selectors/fundamentalSelectors/selectGeneral";
-import selectFundamentalsIsLoaded from "../selectors/fundamentalSelectors/selectFundamentalsIsLoaded";
+import { Helmet } from "react-helmet";
+import getTitle from "../shared/getTitle";
+import resourceName from "../shared/resourceName";
+import useVirtualExchange from "../hooks/useVirtualExchange";
 
 const commonTableRootClasses = {
   "& th": {
@@ -80,7 +83,6 @@ const getIndustryAveragesSortComparer = (industryName) => (a) => {
 
 const IndustryAverages = () => {
   const theme = useTheme();
-  const isLoaded = useSelector(selectFundamentalsIsLoaded);
   const isInUS = useSelector(selectIsInUS);
   const currentIndustry = useSelector(selectCurrentIndustry);
   const general = useSelector(selectGeneral);
@@ -88,8 +90,7 @@ const IndustryAverages = () => {
   const globalTableClasses = useGlobalTableClasses({
     isInUS,
   });
-
-  if (!isLoaded) return null;
+  const exchange = useVirtualExchange();
 
   const industryAveragesSortComparer = getIndustryAveragesSortComparer(
     currentIndustry.industryName
@@ -105,6 +106,15 @@ const IndustryAverages = () => {
   // TODO: Implement sticky first column
   return (
     <>
+      <Helmet>
+        <title>
+          {getTitle(`${general.Name} Industry Average Financial Ratios`)}
+        </title>
+        <link
+          rel="canonical"
+          href={`${resourceName}/industry-averages/${general.Code}.${exchange}`}
+        />
+      </Helmet>
       <Box sx={{ mb: 3 }}>
         <Typography variant="h4">{general.Name}</Typography>
         <Typography
