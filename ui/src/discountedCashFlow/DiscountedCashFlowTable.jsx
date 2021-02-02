@@ -21,8 +21,9 @@ import selectSharesStats from "../selectors/fundamentalSelectors/selectSharesSta
 import formatCellValue from "./formatCellValue";
 import selectIsYoyGrowthToggled from "../selectors/dcfSelectors/selectIsYoyGrowthToggled";
 import FormatRawNumberToPercent from "../components/FormatRawNumberToPercent";
+import selectIsShowFormulasToggled from "../selectors/dcfSelectors/selectIsShowFormulasToggled";
 
-const DiscountedCashFlowTable = ({ columnWidths, showFormulas }) => {
+const DiscountedCashFlowTable = ({ columnWidths }) => {
   const theme = useTheme();
   const isOnMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const cells = useSelector(selectCells);
@@ -39,17 +40,18 @@ const DiscountedCashFlowTable = ({ columnWidths, showFormulas }) => {
     selectValueOfAllOptionsOutstanding
   );
   const isYoyGrowthToggled = useSelector(selectIsYoyGrowthToggled);
+  const isShowFormulasToggled = useSelector(selectIsShowFormulasToggled);
 
   const cellColumnWidths = useMemo(() => {
     return columns.map((column) => {
       if (column === "A") {
         return 220;
-      } else if (showFormulas) {
+      } else if (isShowFormulasToggled) {
         return 200;
       }
       return columnWidths?.[column] ?? 120;
     });
-  }, [columnWidths, showFormulas]);
+  }, [columnWidths, isShowFormulasToggled]);
   const cellRenderer = useCallback(
     (rowIndex, columnIndex) => {
       const column = String.fromCharCode(
@@ -69,7 +71,7 @@ const DiscountedCashFlowTable = ({ columnWidths, showFormulas }) => {
 
       if (column === startColumn || rowIndex === 1) {
         intent = "primary";
-      } else if (showFormulas) {
+      } else if (isShowFormulasToggled) {
         node = cell.expr;
       } else if (isYoyGrowthToggled && cell.yoyGrowthValue !== undefined) {
         node = <FormatRawNumberToPercent value={cell.yoyGrowthValue} />;
@@ -95,8 +97,8 @@ const DiscountedCashFlowTable = ({ columnWidths, showFormulas }) => {
     },
     [
       cells,
+      isShowFormulasToggled,
       isYoyGrowthToggled,
-      showFormulas,
       theme.typography.fontFamily,
       theme.typography.fontSize,
     ]
@@ -243,7 +245,7 @@ const DiscountedCashFlowTable = ({ columnWidths, showFormulas }) => {
   // Key: Hack to force re-render the table when formula state changes
   let key = 0;
 
-  if (showFormulas) {
+  if (isShowFormulasToggled) {
     key = 1;
   }
 

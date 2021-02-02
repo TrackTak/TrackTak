@@ -98,10 +98,7 @@ const DiscountedCashFlowSheet = ({ columnWidths }) => {
         </Link>
       </Typography>
       <LazyLoad offset={300} placeholder={<Placeholder />}>
-        <DiscountedCashFlowTable
-          columnWidths={columnWidths}
-          isShowFormulasToggled={isShowFormulasToggled}
-        />
+        <DiscountedCashFlowTable columnWidths={columnWidths} />
       </LazyLoad>
     </Box>
   );
