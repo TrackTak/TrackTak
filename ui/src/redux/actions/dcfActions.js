@@ -13,3 +13,7 @@ export const updateCells = createAction(
 );
 
 export const setIsYoyGrowthToggled = createAction("dcf/setIsYoyGrowthToggled");
+
+export const setIsShowFormulasToggled = createAction(
+  "dcf/setIsShowFormulasToggled"
+);

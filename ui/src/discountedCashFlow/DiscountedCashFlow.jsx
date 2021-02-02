@@ -25,6 +25,7 @@ import selectYearlyBalanceSheets from "../selectors/fundamentalSelectors/selectY
 import selectValuationCurrencyCode from "../selectors/fundamentalSelectors/selectValuationCurrencyCode";
 import selectValuationCurrencySymbol from "../selectors/fundamentalSelectors/selectValuationCurrencySymbol";
 import selectFundamentalsIsLoaded from "../selectors/fundamentalSelectors/selectFundamentalsIsLoaded";
+import YoyGrowthToggle from "../components/YoyGrowthToggle";
 
 const mapFromStatementsToDateObject = (
   objectToLoop,
@@ -45,6 +46,7 @@ const mapFromStatementsToDateObject = (
 };
 
 const DiscountedCashFlow = () => {
+  const theme = useTheme();
   const isLoaded = useSelector(selectFundamentalsIsLoaded);
   const isInUS = useSelector(selectIsInUS);
   const yearlyIncomeStatements = useSelector(selectYearlyIncomeStatements);
@@ -53,7 +55,6 @@ const DiscountedCashFlow = () => {
   const valuationCurrencyCode = useSelector(selectValuationCurrencyCode);
   const valuationCurrencySymbol = useSelector(selectValuationCurrencySymbol);
   const balanceSheet = useSelector(selectRecentBalanceSheet);
-  const theme = useTheme();
 
   if (!isLoaded) return null;
 
@@ -237,7 +238,12 @@ const DiscountedCashFlow = () => {
         <CompanyOverviewStats />
       </Box>
       <Section>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <Typography variant="h5">Past Fundamentals</Typography>
           <Typography
             style={{
@@ -247,6 +253,9 @@ const DiscountedCashFlow = () => {
           >
             ({valuationCurrencySymbol}:{valuationCurrencyCode})
           </Typography>
+          <Box sx={{ ml: "auto" }}>
+            <YoyGrowthToggle />
+          </Box>
         </Box>
         <Box style={{ overflowX: "auto" }}>
           <TTTable columns={columns} data={data} />

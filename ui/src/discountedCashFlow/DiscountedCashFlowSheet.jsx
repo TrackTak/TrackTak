@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Typography,
@@ -12,10 +12,14 @@ import LazyLoad from "react-lazyload";
 import ExportToExcel from "./ExportToExcel";
 import DiscountedCashFlowTable from "./DiscountedCashFlowTable";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsYoyGrowthToggled } from "../redux/actions/dcfActions";
-import selectIsYoyGrowthToggled from "../selectors/dcfSelectors/selectIsYoyGrowthToggled";
+import {
+  setIsShowFormulasToggled,
+  setIsYoyGrowthToggled,
+} from "../redux/actions/dcfActions";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import YoyGrowthToggle from "../components/YoyGrowthToggle";
+import selectIsShowFormulasToggled from "../selectors/dcfSelectors/selectIsShowFormulasToggled";
 
 const Placeholder = () => {
   const theme = useTheme();
@@ -36,17 +40,11 @@ const Placeholder = () => {
 
 const DiscountedCashFlowSheet = ({ columnWidths }) => {
   const dispatch = useDispatch();
-  const [showFormulas, setShowFormulas] = useState(false);
-  const isYoyGrowthToggled = useSelector(selectIsYoyGrowthToggled);
+  const isShowFormulasToggled = useSelector(selectIsShowFormulasToggled);
 
-  const showFormulasToggledOnChange = (event) => {
-    setShowFormulas((state) => !state);
+  const showFormulasToggledOnChange = () => {
+    dispatch(setIsShowFormulasToggled(!isShowFormulasToggled));
     dispatch(setIsYoyGrowthToggled(false));
-  };
-
-  const isYoyGrowthToggledOnChange = (event) => {
-    dispatch(setIsYoyGrowthToggled(!isYoyGrowthToggled));
-    setShowFormulas(false);
   };
 
   // TODO: Add an expand button to see it full screen
@@ -65,7 +63,7 @@ const DiscountedCashFlowSheet = ({ columnWidths }) => {
           <FormControlLabel
             control={
               <Switch
-                checked={showFormulas}
+                checked={isShowFormulasToggled}
                 onChange={showFormulasToggledOnChange}
                 color="primary"
               />
@@ -77,16 +75,7 @@ const DiscountedCashFlowSheet = ({ columnWidths }) => {
               ml: 1,
             }}
           >
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={isYoyGrowthToggled}
-                  onChange={isYoyGrowthToggledOnChange}
-                  color="primary"
-                />
-              }
-              label="%YOY Growth"
-            />
+            <YoyGrowthToggle />
           </Box>
           <Box
             sx={{
@@ -111,7 +100,7 @@ const DiscountedCashFlowSheet = ({ columnWidths }) => {
       <LazyLoad offset={300} placeholder={<Placeholder />}>
         <DiscountedCashFlowTable
           columnWidths={columnWidths}
-          showFormulas={showFormulas}
+          isShowFormulasToggled={isShowFormulasToggled}
         />
       </LazyLoad>
     </Box>

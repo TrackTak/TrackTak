@@ -1,5 +1,9 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { setIsYoyGrowthToggled, updateCells } from "../actions/dcfActions";
+import {
+  setIsYoyGrowthToggled,
+  setIsShowFormulasToggled,
+  updateCells,
+} from "../actions/dcfActions";
 import cells from "../../discountedCashFlow/cells";
 import cellsTree from "../../discountedCashFlow/cellsTree";
 import {
@@ -69,6 +73,7 @@ const calculateNewCells = (cells, cellsToUpdate, scope) => {
 const initialState = {
   cells,
   isYoyGrowthToggled: false,
+  isShowFormulasToggled: false,
   scope: {
     matureMarketEquityRiskPremium,
   },
@@ -100,5 +105,8 @@ export const dcfReducer = createReducer(initialState, (builder) => {
           (currentCell.value - previousCell.value) / currentCell.value;
       }
     });
+  });
+  builder.addCase(setIsShowFormulasToggled, (state, action) => {
+    state.isShowFormulasToggled = action.payload;
   });
 });
