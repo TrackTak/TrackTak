@@ -15,6 +15,7 @@ import Img from "gatsby-image";
 import RoundButton from "../components/RoundButton";
 import BackgroundImage from "gatsby-background-image";
 import { useEffect } from "react";
+import { navigate } from "gatsby";
 
 const Search = () => {
   return (
@@ -29,6 +30,8 @@ const Search = () => {
 
 const sixteen50 = 1650;
 const twelve50 = 1250;
+const valuationUrl =
+  "stock/aapl-us/discounted-cash-flow?cagrYearOneToFive=0.2&ebitTargetMarginInYearTen=0.25&salesToCapitalRatio=3&yearOfConvergence=3";
 
 const SearchSection = () => {
   const data = useStaticQuery(graphql`
@@ -36,6 +39,13 @@ const SearchSection = () => {
       laptop: file(relativePath: { eq: "laptop.png" }) {
         childImageSharp {
           fluid(maxWidth: 820) {
+            ...GatsbyImageSharpFluid_withWebp
+          }
+        }
+      }
+      arrow: file(relativePath: { eq: "arrow.png" }) {
+        childImageSharp {
+          fluid(maxWidth: 100) {
             ...GatsbyImageSharpFluid_withWebp
           }
         }
@@ -194,10 +204,20 @@ const SearchSection = () => {
             },
           }}
         >
-          <Img
-            fluid={data.laptop.childImageSharp.fluid}
-            alt="Tracktak DCF Example"
-          />
+          <Box
+            sx={{
+              cursor: "pointer",
+            }}
+            role="button"
+            onClick={() => {
+              navigate(valuationUrl);
+            }}
+          >
+            <Img
+              fluid={data.laptop.childImageSharp.fluid}
+              alt="Tracktak DCF Example"
+            />
+          </Box>
           <Hidden mdDown implementation="css">
             <GridDots
               style={{
@@ -209,6 +229,11 @@ const SearchSection = () => {
             />
           </Hidden>
         </Box>
+        <Img
+          style={{ width: "200px", height: "150px" }}
+          fluid={data.arrow.childImageSharp.fluid}
+          alt="Tracktak DCF Apple"
+        />
       </Box>
       <Box
         sx={{
