@@ -12,11 +12,11 @@ import "@tracktak/dcf-react/dist/index.css";
 import "@fontsource/nunito/400.css";
 import "@fontsource/nunito/700.css";
 import theme from "./src/theme";
-import { snackbarReducer } from "./src/redux/reducers/snackbarReducer";
+import { snackbarsReducer } from "./src/redux/reducers/snackbarsReducer";
 import PageSpinner from "./src/components/PageSpinner";
 
 const store = createStore(undefined, {
-  snackbar: snackbarReducer,
+  snackbars: snackbarsReducer,
   fundamentals: (state, action) =>
     extendedFundamentalsReducer(fundamentalsReducer(state, action), action),
 });

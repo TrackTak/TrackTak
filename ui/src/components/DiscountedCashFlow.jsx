@@ -21,12 +21,15 @@ import {
   useTicker,
 } from "@tracktak/dcf-react";
 import { Link as RouterLink } from "gatsby";
-import { useDispatch } from "react-redux";
-import { setMessage } from "../redux/actions/snackbarActions";
+import { useDispatch, useSelector } from "react-redux";
+import { setMessage } from "../redux/actions/snackbarsActions";
 import { useLocation } from "@reach/router";
 import SubscribeCover from "./SubscribeCover";
 import useLocalStorageState from "use-local-storage-state";
 import subscribePopupShownHook from "../hooks/subscribePopupShownHook";
+import selectScope from "../../../packages/dcf-react/src/selectors/dcfSelectors/selectScope";
+import { sentenceCase } from "sentence-case";
+import pluralize from "pluralize";
 
 const DiscountedCashFlow = () => {
   const [subscribePopupShown] = subscribePopupShownHook();
@@ -35,6 +38,7 @@ const DiscountedCashFlow = () => {
   );
   const theme = useTheme();
   const isOnMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const scope = useSelector(selectScope);
   const dispatch = useDispatch();
   const ticker = useTicker();
   const location = useLocation();
@@ -50,6 +54,38 @@ const DiscountedCashFlow = () => {
       );
     }
   }, [dispatch, isOnMobile, rotateSnackbarShown, setRotateSnackbarShown]);
+
+  useEffect(() => {
+    let errors = [];
+
+    const fieldsToCheck = [
+      "price",
+      "totalRevenue",
+      "bookValueOfEquity",
+      "sharesOutstanding",
+    ];
+    const scopeKeys = Object.keys(scope).filter(
+      (key) => fieldsToCheck.indexOf(key) !== -1,
+    );
+
+    scopeKeys.forEach((key) => {
+      if (!scope[key]) {
+        errors.push(sentenceCase(key));
+      }
+    });
+
+    if (errors.length) {
+      dispatch(
+        setMessage({
+          message: `${errors.join(", ")} ${pluralize(
+            "has",
+            errors.length,
+          )} incorrect data from our API. Please export to excel and modify data.`,
+          severity: "error",
+        }),
+      );
+    }
+  }, [dispatch]);
 
   return (
     <React.Fragment>

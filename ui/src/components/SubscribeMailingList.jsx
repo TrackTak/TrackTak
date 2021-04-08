@@ -6,7 +6,7 @@ import RoundButton from "./RoundButton";
 import TTRoundInput from "./TTRoundInput";
 import queryString from "query-string";
 import { useDispatch } from "react-redux";
-import { setMessage } from "../redux/actions/snackbarActions";
+import { setMessage } from "../redux/actions/snackbarsActions";
 import subscribePopupShownHook from "../hooks/subscribePopupShownHook";
 
 const SubscribeMailingList = ({
