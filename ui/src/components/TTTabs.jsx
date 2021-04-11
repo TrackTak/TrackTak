@@ -10,6 +10,7 @@ const stockPaths = [
   "/financial-statements",
   "/synthetic-credit-rating",
   "/industry-averages",
+  "/rnd-amortization-converter",
 ];
 
 const TTTabs = () => {
