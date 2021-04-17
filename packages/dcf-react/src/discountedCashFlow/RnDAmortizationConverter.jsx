@@ -5,15 +5,17 @@ import withFundamentalsLoaded from "../hoc/withFundamentalsLoaded";
 import SubSection from "../components/SubSection";
 import {
   Box,
-  Switch,
   TextField,
   Typography,
   useTheme,
 } from "@material-ui/core";
 import { textFieldRootStyles } from "../shared/utils";
 import selectCurrentIndustry from "../selectors/fundamentalSelectors/selectCurrentIndustry";
+import selectRecentIncomeStatement from "../selectors/fundamentalSelectors/selectRecentIncomeStatement";
 import getSymbolFromCurrency from "currency-symbol-map";
 import TTTable from "../components/TTTable";
+import {FormatInputToMillionCurrency} from "../components/FormatInputToMillion";
+import useSetURLInput from "../hooks/useSetURLInput"
 
 const data =
   (() => [
@@ -60,6 +62,8 @@ const RnDAmortizationTextField = (props) => (
 const RnDAmortizationConverter = () => {
   const theme = useTheme();
   const currentIndustry = useSelector(selectCurrentIndustry);
+  const incomeStatement = useSelector(selectRecentIncomeStatement);
+  const setURLInput = useSetURLInput();
   const currencyCode = useSelector(
     (state) => state.fundamentals.incomeStatement.currencyCode,
   );
@@ -95,6 +99,14 @@ const RnDAmortizationConverter = () => {
         />
         <RnDAmortizationTextField
           label={<Typography>Current year's R&D expense</Typography>}
+          value={incomeStatement.researchDevelopment}
+          onBlur={(value) => {
+            setURLInput("researchDevelopment", value);
+          }}
+          InputProps={{
+            inputComponent: FormatInputToMillionCurrency,
+            //million/use currency/optional inputs
+          }}
         />
       </Box>
       <Box>

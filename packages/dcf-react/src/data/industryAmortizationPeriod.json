@@ -13,18 +13,22 @@
   },
   {
     "industryName": "Apparel",
-    "amortizationPeriod": 3
+    "amortizationPeriod": 5
   },
   {
     "industryName": "Auto & Truck",
     "amortizationPeriod": 10
   },
   {
-    "industryName": "Retail (Automotive)",
+    "industryName": "Auto Parts",
     "amortizationPeriod": 5
   },
   {
     "industryName": "Bank (Money Center)",
+    "amortizationPeriod": 2
+  },
+  {
+    "industryName": "Banks (Regional)",
     "amortizationPeriod": 2
   },
   {
@@ -36,19 +40,23 @@
     "amortizationPeriod": 3
   },
   {
+    "industryName": "Broadcasting",
+    "amortizationPeriod": 10
+  },
+  {
+    "industryName": "Brokerage & Investment Banking",
+    "amortizationPeriod": 3
+  },
+  {
     "industryName": "Building Materials",
     "amortizationPeriod": 5
   },
   {
+    "industryName": "Business & Consumer Services",
+    "amortizationPeriod": 2
+  },
+  {
     "industryName": "Cable TV",
-    "amortizationPeriod": 10
-  },
-  {
-    "industryName": "Green & Renewable Energy",
-    "amortizationPeriod": 10
-  },
-  {
-    "industryName": "Construction Supplies",
     "amortizationPeriod": 10
   },
   {
@@ -68,16 +76,16 @@
     "amortizationPeriod": 5
   },
   {
-    "industryName": "Computers/Peripherals",
-    "amortizationPeriod": 5
-  },
-  {
     "industryName": "Computer Services",
     "amortizationPeriod": 3
   },
   {
-    "industryName": "Precious Metals",
+    "industryName": "Computers/Peripherals",
     "amortizationPeriod": 5
+  },
+  {
+    "industryName": "Construction Supplies",
+    "amortizationPeriod": 10
   },
   {
     "industryName": "Diversified",
@@ -96,15 +104,19 @@
     "amortizationPeriod": 3
   },
   {
-    "industryName": "Utility (General)",
-    "amortizationPeriod": 10
-  },
-  {
     "industryName": "Electrical Equipment",
     "amortizationPeriod": 10
   },
   {
+    "industryName": "Electronics (Consumer & Office)",
+    "amortizationPeriod": 10
+  },
+  {
     "industryName": "Electronics (General)",
+    "amortizationPeriod": 5
+  },
+  {
+    "industryName": "Engineering/Construction",
     "amortizationPeriod": 5
   },
   {
@@ -113,6 +125,10 @@
   },
   {
     "industryName": "Environmental & Waste Services",
+    "amortizationPeriod": 5
+  },
+  {
+    "industryName": "Farming/Agriculture",
     "amortizationPeriod": 5
   },
   {
@@ -128,28 +144,32 @@
     "amortizationPeriod": 3
   },
   {
-    "industryName": "Telecom (Wireless)",
-    "amortizationPeriod": 10
-  },
-  {
     "industryName": "Furn/Home Furnishings",
     "amortizationPeriod": 5
   },
   {
-    "industryName": "Metals & Mining",
-    "amortizationPeriod": 5
-  },
-  {
-    "industryName": "Retail (Grocery and Food)Grocery",
-    "amortizationPeriod": 2
+    "industryName": "Green & Renewable Energy",
+    "amortizationPeriod": 10
   },
   {
     "industryName": "Healthcare Information and Technology",
     "amortizationPeriod": 3
   },
   {
+    "industryName": "Healthcare Products",
+    "amortizationPeriod": 5
+  },
+  {
+    "industryName": "Healthcare Support Services",
+    "amortizationPeriod": 3
+  },
+  {
     "industryName": "Homebuilding",
     "amortizationPeriod": 5
+  },
+  {
+    "industryName": "Hospitals/Healthcare Facilities",
+    "amortizationPeriod": 3
   },
   {
     "industryName": "Hotel/Gaming",
@@ -160,7 +180,7 @@
     "amortizationPeriod": 3
   },
   {
-    "industryName": "Oilfield Svcs/Equip.",
+    "industryName": "Information Services",
     "amortizationPeriod": 3
   },
   {
@@ -176,11 +196,7 @@
     "amortizationPeriod": 3
   },
   {
-    "industryName": "Software (Internet)",
-    "amortizationPeriod": 3
-  },
-  {
-    "industryName": "Brokerage & Investment Banking",
+    "industryName": "Investments & Asset Management",
     "amortizationPeriod": 3
   },
   {
@@ -188,40 +204,28 @@
     "amortizationPeriod": 10
   },
   {
-    "industryName": "Homebuilding",
-    "amortizationPerioHealthcare Support Services": 5
-  },
-  {
-    "industryName": "Transportation",
-    "amortizationPeriod": 10
-  },
-  {
-    "industryName": "Healthcare Support Services",
-    "amortizationPeriod": 3
-  },
-  {
-    "industryName": "Healthcare Products",
+    "industryName": "Metals & Mining",
     "amortizationPeriod": 5
   },
   {
-    "industryName": "Precious Metals",
+    "industryName": "Office Equipment & Services",
     "amortizationPeriod": 5
   },
   {
-    "industryName": "Oil/Gas Distribution",
-    "amortizationPeriod": 10
+    "industryName": "Oil/Gas (Integrated)",
+    "amortizationPeriod": 5
   },
   {
     "industryName": "Oil/Gas (Production and Exploration)",
     "amortizationPeriod": 10
   },
   {
-    "industryName": "Publishing & Newspapers",
-    "amortizationPeriod": 3
+    "industryName": "Oil/Gas Distribution",
+    "amortizationPeriod": 10
   },
   {
-    "industryName": "Office Equipment & Services",
-    "amortizationPeriod": 5
+    "industryName": "Oilfield Svcs/Equip.",
+    "amortizationPeriod": 3
   },
   {
     "industryName": "Oilfield Svcs/Equip.",
@@ -236,19 +240,39 @@
     "amortizationPeriod": 10
   },
   {
-    "industryName": "Oil/Gas (Integrated)",
+    "industryName": "Power",
+    "amortizationPeriod": 10
+  },
+  {
+    "industryName": "Precious Metals",
     "amortizationPeriod": 5
+  },
+  {
+    "industryName": "Publishing & Newspapers",
+    "amortizationPeriod": 3
   },
   {
     "industryName": "R.E.I.T.",
     "amortizationPeriod": 3
   },
   {
-    "industryName": "Transportation (Railroads)",
-    "amortizationPeriod": 5
+    "industryName": "Real Estate (Development)",
+    "amortizationPeriod": 3
+  },
+  {
+    "industryName": "Real Estate (General/Diversified)",
+    "amortizationPeriod": 3
+  },
+  {
+    "industryName": "Real Estate (Operations & Services)",
+    "amortizationPeriod": 3
   },
   {
     "industryName": "Recreation",
+    "amortizationPeriod": 5
+  },
+  {
+    "industryName": "Reinsurance",
     "amortizationPeriod": 5
   },
   {
@@ -256,15 +280,31 @@
     "amortizationPeriod": 2
   },
   {
-    "industryName": "Retail (Special Lines)",
-    "amortizationPeriod": 2
+    "industryName": "Retail (Automotive)",
+    "amortizationPeriod": 5
   },
   {
     "industryName": "Retail (Building Supply)",
     "amortizationPeriod": 2
   },
   {
-    "industryName": "Brokerage & Investment Banking",
+    "industryName": "Retail (Distributors)",
+    "amortizationPeriod": 2
+  },
+  {
+    "industryName": "Retail (General)",
+    "amortizationPeriod": 2
+  },
+  {
+    "industryName": "Retail (Grocery and Food)",
+    "amortizationPeriod": 2
+  },
+  {
+    "industryName": "Retail (Online)",
+    "amortizationPeriod": 2
+  },
+  {
+    "industryName": "Retail (Special Lines)",
     "amortizationPeriod": 2
   },
   {
@@ -276,6 +316,26 @@
     "amortizationPeriod": 5
   },
   {
+    "industryName": "Shipbuilding & Marine",
+    "amortizationPeriod": 5
+  },
+  {
+    "industryName": "Shoe",
+    "amortizationPeriod": 3
+  },
+  {
+    "industryName": "Software (Entertainment)",
+    "amortizationPeriod": 3
+  },
+  {
+    "industryName": "Software (Internet)",
+    "amortizationPeriod": 3
+  },
+  {
+    "industryName": "Software (System & Application)",
+    "amortizationPeriod": 3
+  },
+  {
     "industryName": "Steel",
     "amortizationPeriod": 5
   },
@@ -284,19 +344,11 @@
     "amortizationPeriod": 10
   },
   {
+    "industryName": "Telecom. Equipment",
+    "amortizationPeriod": 5
+  },
+  {
     "industryName": "Telecom. Services",
-    "amortizationPeriod": 5
-  },
-  {
-    "industryName": "Chemical (Specialty)",
-    "amortizationPeriod": 5
-  },
-  {
-    "industryName": "Apparel",
-    "amortizationPeriod": 5
-  },
-  {
-    "industryName": "Rubber& Tires",
     "amortizationPeriod": 5
   },
   {
@@ -304,15 +356,23 @@
     "amortizationPeriod": 5
   },
   {
+    "industryName": "Transportation",
+    "amortizationPeriod": 10
+  },
+  {
+    "industryName": "Transportation (Railroads)",
+    "amortizationPeriod": 5
+  },
+  {
     "industryName": "Trucking",
     "amortizationPeriod": 5
   },
   {
-    "industryName": "Utility (Foreign)",
+    "industryName": "Utility (General)",
     "amortizationPeriod": 10
   },
   {
     "industryName": "Utility (Water)",
     "amortizationPeriod": 10
   }
-]
+ ]
