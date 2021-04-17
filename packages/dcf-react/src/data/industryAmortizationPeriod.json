@@ -256,6 +256,10 @@
     "amortizationPeriod": 3
   },
   {
+    "industryName": "Rubber& Tires",
+    "amortizationPeriod": 5
+  },
+  {
     "industryName": "Real Estate (Development)",
     "amortizationPeriod": 3
   },
