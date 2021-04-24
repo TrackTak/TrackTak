@@ -15,6 +15,7 @@ import { useState } from "react";
 import FormatRawNumberToMillion from "../components/FormatRawNumberToMillion";
 import selectYearlyIncomeStatements from "../selectors/fundamentalSelectors/selectYearlyIncomeStatements";
 import FormatRawNumber from "../components/FormatRawNumber";
+import BoldValueLabel from "../components/BoldValueLabel";
 
 const amortizationIndustryColumns = [
   {
@@ -56,17 +57,26 @@ const RnDAmortizationConverter = () => {
   const setURLInput = useSetURLInput();
   const currentIndustry = useSelector(selectCurrentIndustry);
   const incomeStatements = useSelector(selectYearlyIncomeStatements);
+  const incomeStatementsArray = Object.values(incomeStatements);
   const initialAmortizationPeriod = useSelector(selectAmortizationIndustry)
     .amortizationPeriod;
   const [amortizationPeriod, setAmortizationPeriod] = useState(
     initialAmortizationPeriod,
   );
   const [dataRow, setDataRow] = useState([]);
+  const [sumValueOfResearchAsset, setSumValueOfResearchAsset] = useState(0);
+  const [
+    sumAmortizationOfResearchAssetForCurrentYear,
+    setSumAmortizationOfResearchAssetForCurrentYear,
+  ] = useState(0);
 
   const currencyCode = useSelector(
     (state) => state.fundamentals.incomeStatement.currencyCode,
   );
   const currencySymbol = getSymbolFromCurrency(currencyCode);
+  const adjustmentToOperatingIncome =
+    incomeStatementsArray[0].researchDevelopment -
+    sumAmortizationOfResearchAssetForCurrentYear;
 
   useEffect(() => {
     setAmortizationPeriod(initialAmortizationPeriod);
@@ -74,8 +84,9 @@ const RnDAmortizationConverter = () => {
 
   useEffect(() => {
     const dataRow = [];
-    const incomeStatementsArray = Object.values(incomeStatements);
     const unamortizedPortionSlice = 1 / amortizationPeriod;
+    let sumValueOfResearchAsset = 0;
+    let sumAmortizationOfResearchAssetForCurrentYear = 0;
 
     for (let i = 0; i <= amortizationPeriod; i++) {
       const year = i === 0 ? "Current" : i * -1;
@@ -83,8 +94,15 @@ const RnDAmortizationConverter = () => {
       const unamortizedPortion = 1 - currentUnamortizationPortion;
       const unamortizedValue =
         incomeStatementsArray[i].researchDevelopment * unamortizedPortion;
-      const amortizationThisYear =
-        incomeStatementsArray[i].researchDevelopment / year;
+
+      let amortizationThisYear =
+        incomeStatementsArray[i].researchDevelopment / i;
+
+      amortizationThisYear =
+        amortizationThisYear === Infinity ? 0 : amortizationThisYear;
+
+      sumValueOfResearchAsset += unamortizedValue;
+      sumAmortizationOfResearchAssetForCurrentYear += amortizationThisYear;
 
       dataRow.push({
         year,
@@ -116,7 +134,18 @@ const RnDAmortizationConverter = () => {
     }
 
     setDataRow(dataRow);
-  }, [amortizationPeriod, incomeStatements]);
+    setSumValueOfResearchAsset(sumValueOfResearchAsset);
+    setSumAmortizationOfResearchAssetForCurrentYear(
+      sumAmortizationOfResearchAssetForCurrentYear,
+    );
+  }, [
+    amortizationPeriod,
+    incomeStatements,
+    sumValueOfResearchAsset,
+    sumAmortizationOfResearchAssetForCurrentYear,
+    adjustmentToOperatingIncome,
+    incomeStatementsArray,
+  ]);
 
   return (
     <React.Fragment>
@@ -168,21 +197,48 @@ const RnDAmortizationConverter = () => {
           gap: theme.spacing(2),
         }}
       >
-        <RnDAmortizationTextField
-          label={<Typography>Value of Research Asset </Typography>}
-        />
-        <RnDAmortizationTextField
-          label={
-            <Typography>
-              Amortization of research asset for current year
-            </Typography>
+        <BoldValueLabel
+          value={
+            <FormatRawNumberToMillion
+              suffix="mln"
+              decimalScale={2}
+              useCurrencySymbol
+              value={sumValueOfResearchAsset}
+            />
           }
+          label="Sum of Unamortized Value of Research Asset"
         />
-        <RnDAmortizationTextField
-          label={<Typography>Adjustment to Operating Income</Typography>}
+        <BoldValueLabel
+          value={
+            <FormatRawNumberToMillion
+              suffix="mln"
+              decimalScale={2}
+              useCurrencySymbol
+              value={sumAmortizationOfResearchAssetForCurrentYear}
+            />
+          }
+          label="Sum of Amortization of research asset for current year"
         />
-        <RnDAmortizationTextField
-          label={<Typography>Tax Effect of R&amp;D Expensing</Typography>}
+        <BoldValueLabel
+          value={
+            <FormatRawNumberToMillion
+              value={adjustmentToOperatingIncome}
+              suffix="mln"
+              decimalScale={2}
+              useCurrencySymbol
+            />
+          }
+          label="Adjustment to Operating Income"
+        />
+        <BoldValueLabel
+          value={
+            <FormatRawNumberToMillion
+              suffix="mln"
+              decimalScale={2}
+              useCurrencySymbol
+            />
+          }
+          label="Tax Effect of R&amp;D Expensing"
         />
       </Box>
     </React.Fragment>
