@@ -16,6 +16,7 @@ import FormatRawNumberToMillion from "../components/FormatRawNumberToMillion";
 import selectYearlyIncomeStatements from "../selectors/fundamentalSelectors/selectYearlyIncomeStatements";
 import FormatRawNumber from "../components/FormatRawNumber";
 import BoldValueLabel from "../components/BoldValueLabel";
+import selectCurrentEquityRiskPremium from "../selectors/fundamentalSelectors/selectCurrentEquityRiskPremium";
 
 const amortizationIndustryColumns = [
   {
@@ -60,6 +61,8 @@ const RnDAmortizationConverter = () => {
   const incomeStatementsArray = Object.values(incomeStatements);
   const initialAmortizationPeriod = useSelector(selectAmortizationIndustry)
     .amortizationPeriod;
+  const marginalTaxRate = useSelector(selectCurrentEquityRiskPremium)
+    .marginalTaxRate;
   const [amortizationPeriod, setAmortizationPeriod] = useState(
     initialAmortizationPeriod,
   );
@@ -77,6 +80,8 @@ const RnDAmortizationConverter = () => {
   const adjustmentToOperatingIncome =
     incomeStatementsArray[0].researchDevelopment -
     sumAmortizationOfResearchAssetForCurrentYear;
+
+  const taxEffectOfRnDExpensing = adjustmentToOperatingIncome * marginalTaxRate;
 
   useEffect(() => {
     setAmortizationPeriod(initialAmortizationPeriod);
@@ -233,6 +238,7 @@ const RnDAmortizationConverter = () => {
         <BoldValueLabel
           value={
             <FormatRawNumberToMillion
+              value={taxEffectOfRnDExpensing}
               suffix="mln"
               decimalScale={2}
               useCurrencySymbol
