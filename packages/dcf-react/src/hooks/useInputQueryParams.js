@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 import useQueryParams from "./useQueryParams";
-
-export const cagrYearOneToFiveQueryName = "cagrYearOneToFive";
-export const ebitTargetMarginInYearTenQueryName = "ebitTargetMarginInYearTen";
-export const yearOfConvergenceQueryName = "yearOfConvergence";
-export const salesToCapitalRatioQueryName = "salesToCapitalRatio";
+import {
+  cagrYearOneToFiveQueryName,
+  ebitTargetMarginInYearTenQueryName,
+  yearOfConvergenceQueryName,
+  salesToCapitalRatioQueryName,
+} from "../shared/inputQueryNames";
 
 export const requiredInputQueries = [
   { name: cagrYearOneToFiveQueryName, type: "percent" },
@@ -36,7 +37,8 @@ const getInputQueryParams = (query) => {
   const inputQueryParams = {};
 
   inputQueries.forEach(({ name }) => {
-    inputQueryParams[name] = query[name] ? parseFloat(query[name]) : undefined;
+    // Set it to null and not undefined so that they still get sent through the axios requests
+    inputQueryParams[name] = query[name] ? parseFloat(query[name]) : null;
   });
 
   return inputQueryParams;

@@ -1,19 +1,16 @@
-/* eslint-disable node/no-unpublished-require */
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "production",
-  devtool: "source-map",
-  entry: {
-    server: "./app.js",
-  },
+  entry: ["./src/app.js", "./src/workers/index.js"],
   output: {
     path: path.join(__dirname, "build"),
     filename: "app.js",
   },
   target: "node",
+  externalsPresets: { node: true },
   node: {
     __dirname: false,
     __filename: false,
@@ -23,6 +20,12 @@ module.exports = {
     rules: [
       {
         exclude: /node_modules/,
+      },
+      {
+        test: /\.js$/,
+        resolve: {
+          fullySpecified: false,
+        },
       },
     ],
   },
