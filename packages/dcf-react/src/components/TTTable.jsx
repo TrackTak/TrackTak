@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Table,
@@ -6,6 +6,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TextField,
 } from "@material-ui/core";
 import { useBlockLayout, useTable } from "react-table";
 import { FixedSizeList } from "react-window";
@@ -24,6 +25,38 @@ const RenderTableRow = ({ prepareRow, row, index, ...props }) => {
   );
 };
 
+//uncontrolled input fix
+const EditableCell = ({
+  value: initialValue = "",
+  row: { index },
+  column: { id },
+  updateMyData,
+}) => {
+  const [value, setValue] = useState(initialValue);
+
+  const onEditChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  const onEditBlur = () => {
+    updateMyData(index, id, value);
+  };
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  return (
+    <Box>
+      <TextField value={value} onChange={onEditChange} onBlur={onEditBlur} />
+    </Box>
+  );
+};
+
+const defaultColumn = {
+  Cell: EditableCell,
+};
+
 const TTTable = ({
   columns,
   data,
@@ -31,6 +64,8 @@ const TTTable = ({
   tableHeadProps,
   useVirtualization,
   fixedSizeListProps,
+  isEditable,
+  updateMyData,
   sx,
   ...props
 }) => {
@@ -45,6 +80,8 @@ const TTTable = ({
     {
       columns,
       data,
+      defaultColumn,
+      updateMyData,
       ...tableOptions,
     },
     useVirtualization ? useBlockLayout : undefined,

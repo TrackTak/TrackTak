@@ -3,7 +3,13 @@ import { useSelector } from "react-redux";
 import CompanyHeading from "../components/CompanyHeading";
 import withFundamentalsLoaded from "../hoc/withFundamentalsLoaded";
 import SubSection from "../components/SubSection";
-import { Box, TextField, Typography, useTheme } from "@material-ui/core";
+import {
+  Box,
+  IconButton,
+  TextField,
+  Typography,
+  useTheme,
+} from "@material-ui/core";
 import { textFieldRootStyles } from "../shared/utils";
 import selectCurrentIndustry from "../selectors/fundamentalSelectors/selectCurrentIndustry";
 import getSymbolFromCurrency from "currency-symbol-map";
@@ -17,6 +23,9 @@ import selectYearlyIncomeStatements from "../selectors/fundamentalSelectors/sele
 import FormatRawNumber from "../components/FormatRawNumber";
 import BoldValueLabel from "../components/BoldValueLabel";
 import selectCurrentEquityRiskPremium from "../selectors/fundamentalSelectors/selectCurrentEquityRiskPremium";
+import RotateLeftIcon from "@material-ui/icons/RotateLeft";
+import { DCFControlTypography } from "./ExportToExcel";
+import { useMemo } from "react";
 
 const amortizationIndustryColumns = [
   {
@@ -58,7 +67,9 @@ const RnDAmortizationConverter = () => {
   const setURLInput = useSetURLInput();
   const currentIndustry = useSelector(selectCurrentIndustry);
   const incomeStatements = useSelector(selectYearlyIncomeStatements);
-  const incomeStatementsArray = Object.values(incomeStatements);
+  const incomeStatementsArray = useMemo(() => {
+    return Object.values(incomeStatements);
+  }, [incomeStatements]);
   const initialAmortizationPeriod = useSelector(selectAmortizationIndustry)
     .amortizationPeriod;
   const marginalTaxRate = useSelector(selectCurrentEquityRiskPremium)
@@ -111,30 +122,31 @@ const RnDAmortizationConverter = () => {
 
       dataRow.push({
         year,
-        rnDExpenses: (
-          <FormatRawNumberToMillion
-            value={incomeStatementsArray[i].researchDevelopment}
-            useCurrencySymbol
-            decimalScale={2}
-          />
-        ),
-        unamortizedPortion: (
-          <FormatRawNumber value={unamortizedPortion} decimalScale={2} />
-        ),
-        unamortizedValue: (
-          <FormatRawNumberToMillion
-            value={unamortizedValue}
-            useCurrencySymbol
-            decimalScale={2}
-          />
-        ),
-        amortizationThisYear: (
-          <FormatRawNumberToMillion
-            value={amortizationThisYear}
-            useCurrencySymbol
-            decimalScale={2}
-          />
-        ),
+        rnDExpenses: incomeStatementsArray[i].researchDevelopment,
+        // rnDExpenses: (
+        //   <FormatRawNumberToMillion
+        //     value={incomeStatementsArray[i].researchDevelopment}
+        //     useCurrencySymbol
+        //     decimalScale={2}
+        //   />
+        // ),
+        // unamortizedPortion: (
+        //   <FormatRawNumber value={unamortizedPortion} decimalScale={2} />
+        // ),
+        // unamortizedValue: (
+        //   <FormatRawNumberToMillion
+        //     value={unamortizedValue}
+        //     useCurrencySymbol
+        //     decimalScale={2}
+        //   />
+        // ),
+        // amortizationThisYear: (
+        //   <FormatRawNumberToMillion
+        //     value={amortizationThisYear}
+        //     useCurrencySymbol
+        //     decimalScale={2}
+        //   />
+        // ),
       });
     }
 
@@ -143,14 +155,7 @@ const RnDAmortizationConverter = () => {
     setSumAmortizationOfResearchAssetForCurrentYear(
       sumAmortizationOfResearchAssetForCurrentYear,
     );
-  }, [
-    amortizationPeriod,
-    incomeStatements,
-    sumValueOfResearchAsset,
-    sumAmortizationOfResearchAssetForCurrentYear,
-    adjustmentToOperatingIncome,
-    incomeStatementsArray,
-  ]);
+  }, [amortizationPeriod, incomeStatementsArray]);
 
   return (
     <React.Fragment>
@@ -191,8 +196,30 @@ const RnDAmortizationConverter = () => {
           }}
         />
       </Box>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <IconButton variant="outlined">
+          <RotateLeftIcon />
+        </IconButton>
+        <DCFControlTypography>Reset</DCFControlTypography>
+      </Box>
       <SubSection>
-        <TTTable columns={amortizationIndustryColumns} data={dataRow} />
+        <TTTable
+          columns={amortizationIndustryColumns}
+          data={dataRow}
+          updateMyData={(rowIndex, columnId, value) => {
+            setDataRow((old) =>
+              old.map((row, index) => {
+                if (index === rowIndex) {
+                  return {
+                    ...old[rowIndex],
+                    [columnId]: value,
+                  };
+                }
+                return row;
+              }),
+            );
+          }}
+        />
       </SubSection>
       <Box
         sx={{
