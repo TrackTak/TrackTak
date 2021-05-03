@@ -26,6 +26,7 @@ import selectCurrentEquityRiskPremium from "../selectors/fundamentalSelectors/se
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import { DCFControlTypography } from "./ExportToExcel";
 import { useMemo } from "react";
+import { useCallback } from "react";
 
 const amortizationIndustryColumns = [
   {
@@ -62,6 +63,101 @@ const RnDAmortizationTextField = (props) => (
   />
 );
 
+const getAmortizationInCurrentYear = (incomeStatementsArray, index) => {
+  let amortizationThisYear =
+    incomeStatementsArray[index].researchDevelopment / index;
+
+  amortizationThisYear =
+    amortizationThisYear === Infinity ? 0 : amortizationThisYear;
+
+  return amortizationThisYear;
+};
+
+const getSumAmortizationOfResearchAssetForCurrentYear = (
+  incomeStatementsArray,
+  amortizationPeriod,
+) => {
+  let sumAmortizationOfResearchAssetForCurrentYear = 0;
+
+  for (let i = 0; i <= amortizationPeriod; i++) {
+    sumAmortizationOfResearchAssetForCurrentYear += getAmortizationInCurrentYear(
+      incomeStatementsArray,
+      i,
+    );
+  }
+
+  return sumAmortizationOfResearchAssetForCurrentYear;
+};
+
+const getSumValueOfResearchAsset = (
+  incomeStatementsArray,
+  amortizationPeriod,
+) => {
+  const unamortizedPortionSlice = 1 / amortizationPeriod;
+  let sumValueOfResearchAsset = 0;
+
+  for (let i = 0; i <= amortizationPeriod; i++) {
+    const currentUnamortizationPortion = unamortizedPortionSlice * i;
+    const unamortizedPortion = 1 - currentUnamortizationPortion;
+    const unamortizedValue =
+      incomeStatementsArray[i].researchDevelopment * unamortizedPortion;
+
+    sumValueOfResearchAsset += unamortizedValue;
+  }
+
+  return sumValueOfResearchAsset;
+};
+
+const getInitialData = (incomeStatementsArray, amortizationPeriod) => {
+  const dataRow = [];
+  const unamortizedPortionSlice = 1 / amortizationPeriod;
+
+  for (let i = 0; i <= amortizationPeriod; i++) {
+    const year = i === 0 ? "Current" : i * -1;
+    const currentUnamortizationPortion = unamortizedPortionSlice * i;
+    const unamortizedPortion = 1 - currentUnamortizationPortion;
+    const unamortizedValue =
+      incomeStatementsArray[i].researchDevelopment * unamortizedPortion;
+
+    dataRow.push({
+      year,
+      rnDExpenses: incomeStatementsArray[i].researchDevelopment,
+      unamortizedPortion,
+      unamortizedValue,
+      amortizationThisYear: getAmortizationInCurrentYear(
+        incomeStatementsArray,
+        i,
+      ),
+      // rnDExpenses: (
+      //   <FormatRawNumberToMillion
+      //     value={incomeStatementsArray[i].researchDevelopment}
+      //     useCurrencySymbol
+      //     decimalScale={2}
+      //   />
+      // ),
+      // unamortizedPortion: (
+      //   <FormatRawNumber value={unamortizedPortion} decimalScale={2} />
+      // ),
+      // unamortizedValue: (
+      //   <FormatRawNumberToMillion
+      //     value={unamortizedValue}
+      //     useCurrencySymbol
+      //     decimalScale={2}
+      //   />
+      // ),
+      // amortizationThisYear: (
+      //   <FormatRawNumberToMillion
+      //     value={amortizationThisYear}
+      //     useCurrencySymbol
+      //     decimalScale={2}
+      //   />
+      // ),
+    });
+  }
+
+  return dataRow;
+};
+
 const RnDAmortizationConverter = () => {
   const theme = useTheme();
   const setURLInput = useSetURLInput();
@@ -77,7 +173,10 @@ const RnDAmortizationConverter = () => {
   const [amortizationPeriod, setAmortizationPeriod] = useState(
     initialAmortizationPeriod,
   );
-  const [dataRow, setDataRow] = useState([]);
+  const [dataRow, setDataRow] = useState(
+    getInitialData(incomeStatementsArray, amortizationPeriod),
+  );
+  const [skipPageReset, setSkipPageReset] = useState(false);
   const [sumValueOfResearchAsset, setSumValueOfResearchAsset] = useState(0);
   const [
     sumAmortizationOfResearchAssetForCurrentYear,
@@ -99,63 +198,24 @@ const RnDAmortizationConverter = () => {
   }, [initialAmortizationPeriod]);
 
   useEffect(() => {
-    const dataRow = [];
-    const unamortizedPortionSlice = 1 / amortizationPeriod;
-    let sumValueOfResearchAsset = 0;
-    let sumAmortizationOfResearchAssetForCurrentYear = 0;
-
-    for (let i = 0; i <= amortizationPeriod; i++) {
-      const year = i === 0 ? "Current" : i * -1;
-      const currentUnamortizationPortion = unamortizedPortionSlice * i;
-      const unamortizedPortion = 1 - currentUnamortizationPortion;
-      const unamortizedValue =
-        incomeStatementsArray[i].researchDevelopment * unamortizedPortion;
-
-      let amortizationThisYear =
-        incomeStatementsArray[i].researchDevelopment / i;
-
-      amortizationThisYear =
-        amortizationThisYear === Infinity ? 0 : amortizationThisYear;
-
-      sumValueOfResearchAsset += unamortizedValue;
-      sumAmortizationOfResearchAssetForCurrentYear += amortizationThisYear;
-
-      dataRow.push({
-        year,
-        rnDExpenses: incomeStatementsArray[i].researchDevelopment,
-        // rnDExpenses: (
-        //   <FormatRawNumberToMillion
-        //     value={incomeStatementsArray[i].researchDevelopment}
-        //     useCurrencySymbol
-        //     decimalScale={2}
-        //   />
-        // ),
-        // unamortizedPortion: (
-        //   <FormatRawNumber value={unamortizedPortion} decimalScale={2} />
-        // ),
-        // unamortizedValue: (
-        //   <FormatRawNumberToMillion
-        //     value={unamortizedValue}
-        //     useCurrencySymbol
-        //     decimalScale={2}
-        //   />
-        // ),
-        // amortizationThisYear: (
-        //   <FormatRawNumberToMillion
-        //     value={amortizationThisYear}
-        //     useCurrencySymbol
-        //     decimalScale={2}
-        //   />
-        // ),
-      });
-    }
-
-    setDataRow(dataRow);
-    setSumValueOfResearchAsset(sumValueOfResearchAsset);
+    setDataRow(getInitialData(incomeStatementsArray, amortizationPeriod));
+    setSumValueOfResearchAsset(
+      getSumValueOfResearchAsset(incomeStatementsArray, amortizationPeriod),
+    );
     setSumAmortizationOfResearchAssetForCurrentYear(
-      sumAmortizationOfResearchAssetForCurrentYear,
+      getSumAmortizationOfResearchAssetForCurrentYear(
+        incomeStatementsArray,
+        amortizationPeriod,
+      ),
     );
   }, [amortizationPeriod, incomeStatementsArray]);
+
+  const resetData = () =>
+    setDataRow(getInitialData(incomeStatementsArray, amortizationPeriod));
+
+  useEffect(() => {
+    setSkipPageReset(false);
+  }, [dataRow]);
 
   return (
     <React.Fragment>
@@ -198,7 +258,7 @@ const RnDAmortizationConverter = () => {
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <IconButton variant="outlined">
-          <RotateLeftIcon />
+          <RotateLeftIcon onClick={resetData} />
         </IconButton>
         <DCFControlTypography>Reset</DCFControlTypography>
       </Box>
@@ -206,12 +266,14 @@ const RnDAmortizationConverter = () => {
         <TTTable
           columns={amortizationIndustryColumns}
           data={dataRow}
+          skipPageReset={skipPageReset}
           updateMyData={(rowIndex, columnId, value) => {
-            setDataRow((old) =>
-              old.map((row, index) => {
+            setSkipPageReset(true);
+            setDataRow((prevState) =>
+              prevState.map((row, index) => {
                 if (index === rowIndex) {
                   return {
-                    ...old[rowIndex],
+                    ...prevState[rowIndex],
                     [columnId]: value,
                   };
                 }

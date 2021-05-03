@@ -25,14 +25,13 @@ const RenderTableRow = ({ prepareRow, row, index, ...props }) => {
   );
 };
 
-//uncontrolled input fix
 const EditableCell = ({
-  value: initialValue = "",
+  value: newValue = "",
   row: { index },
   column: { id },
   updateMyData,
 }) => {
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(newValue);
 
   const onEditChange = (e) => {
     setValue(e.target.value);
@@ -43,8 +42,8 @@ const EditableCell = ({
   };
 
   useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
+    setValue(newValue);
+  }, [newValue]);
 
   return (
     <Box>
@@ -66,6 +65,7 @@ const TTTable = ({
   fixedSizeListProps,
   isEditable,
   updateMyData,
+  skipPageReset,
   sx,
   ...props
 }) => {
@@ -81,6 +81,7 @@ const TTTable = ({
       columns,
       data,
       defaultColumn,
+      autoResetPage: !skipPageReset,
       updateMyData,
       ...tableOptions,
     },
