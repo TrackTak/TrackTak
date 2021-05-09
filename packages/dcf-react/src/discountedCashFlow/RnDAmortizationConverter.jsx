@@ -24,9 +24,7 @@ import FormatRawNumber from "../components/FormatRawNumber";
 import BoldValueLabel from "../components/BoldValueLabel";
 import selectCurrentEquityRiskPremium from "../selectors/fundamentalSelectors/selectCurrentEquityRiskPremium";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
-import { DCFControlTypography } from "./ExportToExcel";
 import { useMemo } from "react";
-import { useCallback } from "react";
 
 const amortizationIndustryColumns = [
   {
@@ -68,7 +66,10 @@ const getAmortizationInCurrentYear = (incomeStatementsArray, index) => {
     incomeStatementsArray[index].researchDevelopment / index;
 
   amortizationThisYear =
-    amortizationThisYear === Infinity ? 0 : amortizationThisYear;
+    amortizationThisYear === isFinite(amortizationThisYear)
+      ? amortizationThisYear
+      : 0;
+  //this logic is not correct
 
   return amortizationThisYear;
 };
@@ -118,10 +119,11 @@ const getInitialData = (incomeStatementsArray, amortizationPeriod) => {
     const unamortizedPortion = 1 - currentUnamortizationPortion;
     const unamortizedValue =
       incomeStatementsArray[i].researchDevelopment * unamortizedPortion;
+    const rndExpenses = incomeStatementsArray[i].researchDevelopment;
 
     dataRow.push({
       year,
-      rnDExpenses: incomeStatementsArray[i].researchDevelopment,
+      rnDExpenses: rndExpenses,
       unamortizedPortion,
       unamortizedValue,
       amortizationThisYear: getAmortizationInCurrentYear(
@@ -178,6 +180,7 @@ const RnDAmortizationConverter = () => {
   );
   const [skipPageReset, setSkipPageReset] = useState(false);
   const [sumValueOfResearchAsset, setSumValueOfResearchAsset] = useState(0);
+  const [isError, setIsError] = useState(false);
   const [
     sumAmortizationOfResearchAssetForCurrentYear,
     setSumAmortizationOfResearchAssetForCurrentYear,
@@ -192,6 +195,20 @@ const RnDAmortizationConverter = () => {
     sumAmortizationOfResearchAssetForCurrentYear;
 
   const taxEffectOfRnDExpensing = adjustmentToOperatingIncome * marginalTaxRate;
+
+  const maxYear = incomeStatementsArray.length;
+
+  const checkAmortizationYearLifeIsValid = (event) => {
+    const value = event.target.value;
+
+    if (value >= maxYear || value <= 0) {
+      setIsError(true);
+      return;
+    }
+    setAmortizationPeriod(value);
+
+    setIsError(false);
+  };
 
   useEffect(() => {
     setAmortizationPeriod(initialAmortizationPeriod);
@@ -243,24 +260,34 @@ const RnDAmortizationConverter = () => {
         }}
       >
         <RnDAmortizationTextField
+          error={isError}
           label={<Typography>R&amp;D Amortization Year Life</Typography>}
           value={amortizationPeriod}
+          helperText={
+            isError
+              ? `Amortization year cannot be higher than ${
+                  maxYear - 1
+                } or zero.`
+              : null
+          }
           onBlur={(value) => {
             setURLInput("amortizationYearLife", value);
           }}
           InputProps={{
             inputComponent: FormatInputToYear,
           }}
-          onChange={(event) => {
-            setAmortizationPeriod(event.target.value);
-          }}
+          onChange={checkAmortizationYearLifeIsValid}
         />
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <IconButton variant="outlined">
-          <RotateLeftIcon onClick={resetData} />
+        <IconButton>
+          <RotateLeftIcon
+            sx={{ width: "35px", height: "35px" }}
+            color="primary"
+            onClick={resetData}
+          />
         </IconButton>
-        <DCFControlTypography>Reset</DCFControlTypography>
+        <Typography>Reset</Typography>
       </Box>
       <SubSection>
         <TTTable
