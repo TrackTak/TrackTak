@@ -20,11 +20,15 @@ import FormatInputToYear from "../components/FormatInputToYear";
 import { useState } from "react";
 import FormatRawNumberToMillion from "../components/FormatRawNumberToMillion";
 import selectYearlyIncomeStatements from "../selectors/fundamentalSelectors/selectYearlyIncomeStatements";
-import FormatRawNumber from "../components/FormatRawNumber";
 import BoldValueLabel from "../components/BoldValueLabel";
 import selectCurrentEquityRiskPremium from "../selectors/fundamentalSelectors/selectCurrentEquityRiskPremium";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import { useMemo } from "react";
+import EditableCell from "../components/EditableCell";
+import {
+  TableInputMillionCurrencyFormatter,
+  TableInputNumberFormatter,
+} from "../components/TableFormatters";
 
 const amortizationIndustryColumns = [
   {
@@ -114,7 +118,7 @@ const getInitialData = (incomeStatementsArray, amortizationPeriod) => {
   const unamortizedPortionSlice = 1 / amortizationPeriod;
 
   for (let i = 0; i <= amortizationPeriod; i++) {
-    const year = i === 0 ? "Current" : i * -1;
+    const year = i === 0 ? 0 : i * -1;
     const currentUnamortizationPortion = unamortizedPortionSlice * i;
     const unamortizedPortion = 1 - currentUnamortizationPortion;
     const unamortizedValue =
@@ -122,38 +126,26 @@ const getInitialData = (incomeStatementsArray, amortizationPeriod) => {
     const rndExpenses = incomeStatementsArray[i].researchDevelopment;
 
     dataRow.push({
-      year,
-      rnDExpenses: rndExpenses,
-      unamortizedPortion,
-      unamortizedValue,
-      amortizationThisYear: getAmortizationInCurrentYear(
-        incomeStatementsArray,
-        i,
-      ),
-      // rnDExpenses: (
-      //   <FormatRawNumberToMillion
-      //     value={incomeStatementsArray[i].researchDevelopment}
-      //     useCurrencySymbol
-      //     decimalScale={2}
-      //   />
-      // ),
-      // unamortizedPortion: (
-      //   <FormatRawNumber value={unamortizedPortion} decimalScale={2} />
-      // ),
-      // unamortizedValue: (
-      //   <FormatRawNumberToMillion
-      //     value={unamortizedValue}
-      //     useCurrencySymbol
-      //     decimalScale={2}
-      //   />
-      // ),
-      // amortizationThisYear: (
-      //   <FormatRawNumberToMillion
-      //     value={amortizationThisYear}
-      //     useCurrencySymbol
-      //     decimalScale={2}
-      //   />
-      // ),
+      year: {
+        FormatInput: TableInputNumberFormatter,
+        value: year,
+      },
+      rnDExpenses: {
+        FormatInput: TableInputMillionCurrencyFormatter,
+        value: rndExpenses,
+      },
+      unamortizedPortion: {
+        FormatInput: TableInputNumberFormatter,
+        value: unamortizedPortion,
+      },
+      unamortizedValue: {
+        FormatInput: TableInputMillionCurrencyFormatter,
+        value: unamortizedValue,
+      },
+      amortizationThisYear: {
+        FormatInput: TableInputMillionCurrencyFormatter,
+        value: getAmortizationInCurrentYear(incomeStatementsArray, i),
+      },
     });
   }
 
@@ -178,7 +170,6 @@ const RnDAmortizationConverter = () => {
   const [dataRow, setDataRow] = useState(
     getInitialData(incomeStatementsArray, amortizationPeriod),
   );
-  const [skipPageReset, setSkipPageReset] = useState(false);
   const [sumValueOfResearchAsset, setSumValueOfResearchAsset] = useState(0);
   const [isError, setIsError] = useState(false);
   const [
@@ -229,10 +220,6 @@ const RnDAmortizationConverter = () => {
 
   const resetData = () =>
     setDataRow(getInitialData(incomeStatementsArray, amortizationPeriod));
-
-  useEffect(() => {
-    setSkipPageReset(false);
-  }, [dataRow]);
 
   return (
     <React.Fragment>
@@ -291,17 +278,23 @@ const RnDAmortizationConverter = () => {
       </Box>
       <SubSection>
         <TTTable
+          tableOptions={{
+            defaultColumn: {
+              Cell: EditableCell,
+            },
+          }}
           columns={amortizationIndustryColumns}
           data={dataRow}
-          skipPageReset={skipPageReset}
           updateMyData={(rowIndex, columnId, value) => {
-            setSkipPageReset(true);
             setDataRow((prevState) =>
               prevState.map((row, index) => {
                 if (index === rowIndex) {
                   return {
-                    ...prevState[rowIndex],
-                    [columnId]: value,
+                    ...row,
+                    [columnId]: {
+                      ...row[columnId],
+                      value,
+                    },
                   };
                 }
                 return row;

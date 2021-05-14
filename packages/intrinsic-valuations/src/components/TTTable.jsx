@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import {
   Box,
   Table,
@@ -6,7 +6,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TextField,
 } from "@material-ui/core";
 import { useBlockLayout, useTable } from "react-table";
 import { FixedSizeList } from "react-window";
@@ -25,37 +24,6 @@ const RenderTableRow = ({ prepareRow, row, index, ...props }) => {
   );
 };
 
-const EditableCell = ({
-  value: newValue = "",
-  row: { index },
-  column: { id },
-  updateMyData,
-}) => {
-  const [value, setValue] = useState(newValue);
-
-  const onEditChange = (e) => {
-    setValue(e.target.value);
-  };
-
-  const onEditBlur = () => {
-    updateMyData(index, id, value);
-  };
-
-  useEffect(() => {
-    setValue(newValue);
-  }, [newValue]);
-
-  return (
-    <Box>
-      <TextField value={value} onChange={onEditChange} onBlur={onEditBlur} />
-    </Box>
-  );
-};
-
-const defaultColumn = {
-  Cell: EditableCell,
-};
-
 const TTTable = ({
   columns,
   data,
@@ -63,9 +31,7 @@ const TTTable = ({
   tableHeadProps,
   useVirtualization,
   fixedSizeListProps,
-  isEditable,
   updateMyData,
-  skipPageReset,
   sx,
   ...props
 }) => {
@@ -80,8 +46,6 @@ const TTTable = ({
     {
       columns,
       data,
-      defaultColumn,
-      autoResetPage: !skipPageReset,
       updateMyData,
       ...tableOptions,
     },
