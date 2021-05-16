@@ -69,12 +69,9 @@ const getAmortizationInCurrentYear = (incomeStatementsArray, index) => {
   let amortizationThisYear =
     incomeStatementsArray[index].researchDevelopment / index;
 
-  amortizationThisYear =
-    amortizationThisYear === isFinite(amortizationThisYear)
-      ? amortizationThisYear
-      : 0;
-  //this logic is not correct
-
+  amortizationThisYear = isFinite(amortizationThisYear)
+    ? amortizationThisYear
+    : 0;
   return amortizationThisYear;
 };
 
