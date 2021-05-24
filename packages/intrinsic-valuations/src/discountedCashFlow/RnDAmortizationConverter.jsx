@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import CompanyHeading from "../components/CompanyHeading";
 import withFundamentalsLoaded from "../hoc/withFundamentalsLoaded";
 import SubSection from "../components/SubSection";
@@ -17,18 +17,17 @@ import TTTable from "../components/TTTable";
 import useSetURLInput from "../hooks/useSetURLInput";
 import selectAmortizationIndustry from "../selectors/fundamentalSelectors/selectAmortizationIndustry";
 import FormatInputToYear from "../components/FormatInputToYear";
-import { useState } from "react";
 import FormatRawNumberToMillion from "../components/FormatRawNumberToMillion";
 import selectYearlyIncomeStatements from "../selectors/fundamentalSelectors/selectYearlyIncomeStatements";
 import BoldValueLabel from "../components/BoldValueLabel";
 import selectCurrentEquityRiskPremium from "../selectors/fundamentalSelectors/selectCurrentEquityRiskPremium";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
-import { useMemo } from "react";
 import EditableCell from "../components/EditableCell";
 import {
   TableInputMillionCurrencyFormatter,
   TableInputNumberFormatter,
 } from "../components/TableFormatters";
+import { setRndAdjustmentToOperatingIncome } from "../redux/actions/fundamentalsActions";
 
 const amortizationIndustryColumns = [
   {
@@ -152,6 +151,7 @@ const getInitialData = (incomeStatementsArray, amortizationPeriod) => {
 const RnDAmortizationConverter = () => {
   const theme = useTheme();
   const setURLInput = useSetURLInput();
+  const dispatch = useDispatch();
   const currentIndustry = useSelector(selectCurrentIndustry);
   const incomeStatements = useSelector(selectYearlyIncomeStatements);
   const incomeStatementsArray = useMemo(() => {
@@ -214,6 +214,10 @@ const RnDAmortizationConverter = () => {
       ),
     );
   }, [amortizationPeriod, incomeStatementsArray]);
+
+  useEffect(() => {
+    dispatch(setRndAdjustmentToOperatingIncome(adjustmentToOperatingIncome));
+  }, [adjustmentToOperatingIncome]);
 
   const resetData = () =>
     setDataRow(getInitialData(incomeStatementsArray, amortizationPeriod));

@@ -34,6 +34,7 @@ import {
   formatNumberRender,
 } from "../../../web-spreadsheet/src/core/helper";
 import getSpreadsheet from "../../../web-spreadsheet/src";
+import selectRndAdjustmentToOperatingIncome from "../selectors/fundamentalSelectors/selectRndAdjustmentToOperatingIncome";
 
 const defaultColWidth = 110;
 const columnAWidth = 170;
@@ -205,6 +206,9 @@ const DiscountedCashFlowTable = ({
   const costOfCapital = useInjectQueryParams(selectCostOfCapital);
   const riskFreeRate = useSelector(selectRiskFreeRate);
   const sharesOutstanding = useSelector(selectSharesOutstanding);
+  const rndAdjustmentToOperatingIncome = useSelector(
+    selectRndAdjustmentToOperatingIncome,
+  );
   const valueOfAllOptionsOutstanding = useInjectQueryParams(
     selectValueOfAllOptionsOutstanding,
   );
@@ -370,6 +374,7 @@ const DiscountedCashFlowTable = ({
             inputQueryParams.proceedsAsAPercentageOfBookValue,
           bookValueOfEquity: balanceSheet.bookValueOfEquity,
           valueOfAllOptionsOutstanding,
+          rndAdjustmentToOperatingIncome,
         }),
       );
     }
@@ -398,6 +403,7 @@ const DiscountedCashFlowTable = ({
     valueOfAllOptionsOutstanding,
     hasAllRequiredInputsFilledIn,
     inputQueryParams.nonOperatingAssets,
+    rndAdjustmentToOperatingIncome,
   ]);
 
   const to = `${location.pathname}#${valueDrivingInputsId}`;

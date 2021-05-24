@@ -4,6 +4,7 @@ import {
   setFundamentals,
   setExchangeRates,
   setTenYearGovernmentBondLastClose,
+  setRndAdjustmentToOperatingIncome,
 } from "../actions/fundamentalsActions";
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   balanceSheet: null,
   incomeStatement: null,
   cashFlowStatement: null,
+  rndAdjustmentToOperatingIncome: null,
 };
 
 const setFundamentalsReducer = (state, action) => {
@@ -59,12 +61,23 @@ const setExchangeRateReducer = (state, { payload = {} }) => {
   }
 };
 
+const setRndAdjustmentToOperatingIncomeReducer = (state, action) => {
+  const rndAdjustmentToOperatingIncome = action.payload;
+
+  state.rndAdjustmentToOperatingIncome = rndAdjustmentToOperatingIncome;
+};
+
 export const fundamentalsReducer = createReducer(initialState, (builder) => {
   builder.addCase(setLastPriceClose, setLastPriceCloseReducer);
   builder.addCase(setFundamentals, setFundamentalsReducer);
+
   builder.addCase(
     setTenYearGovernmentBondLastClose,
     setGovernmentBondTenYearLastCloseReducer,
   );
   builder.addCase(setExchangeRates, setExchangeRateReducer);
+  builder.addCase(
+    setRndAdjustmentToOperatingIncome,
+    setRndAdjustmentToOperatingIncomeReducer,
+  );
 });

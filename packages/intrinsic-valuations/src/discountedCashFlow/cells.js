@@ -75,7 +75,9 @@ const cells = {
   B1: { value: "Base Year" },
   B2: getExpressionProperties("=totalRevenue"),
   B3: getExpressionProperties("=B4/B2"),
-  B4: getExpressionProperties("=operatingIncome"),
+  B4: getExpressionProperties(
+    "=operatingIncome+rndAdjustmentToOperatingIncome",
+  ),
   B5: getExpressionProperties("=pastThreeYearsAverageEffectiveTaxRate"),
   B6: getExpressionProperties("=IF(B4 > 0, B4 * (1-B5), B4)"),
   B9: getExpressionProperties("=netOperatingLoss"),

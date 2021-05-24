@@ -6,3 +6,6 @@ export const setTenYearGovernmentBondLastClose = createAction(
   "fundamentals/setTenYearGovernmentBondLastClose",
 );
 export const setLastPriceClose = createAction("fundamentals/setLastPriceClose");
+export const setRndAdjustmentToOperatingIncome = createAction(
+  "rndAdjustmentToOperatingIncome/setRndAdjustmentToOperatingIncome",
+);
