@@ -109,7 +109,7 @@ const getSumValueOfResearchAsset = (
   return sumValueOfResearchAsset;
 };
 
-const getInitialData = (incomeStatementsArray, amortizationPeriod) => {
+const getDataRows = (incomeStatementsArray, amortizationPeriod) => {
   const dataRow = [];
   const unamortizedPortionSlice = 1 / amortizationPeriod;
 
@@ -165,7 +165,7 @@ const RnDAmortizationConverter = () => {
     initialAmortizationPeriod,
   );
   const [dataRow, setDataRow] = useState(
-    getInitialData(incomeStatementsArray, amortizationPeriod),
+    getDataRows(incomeStatementsArray, amortizationPeriod),
   );
   const [sumValueOfResearchAsset, setSumValueOfResearchAsset] = useState(0);
   const [isError, setIsError] = useState(false);
@@ -173,6 +173,7 @@ const RnDAmortizationConverter = () => {
     sumAmortizationOfResearchAssetForCurrentYear,
     setSumAmortizationOfResearchAssetForCurrentYear,
   ] = useState(0);
+  const [userEdits, setUserEdits] = useState(incomeStatementsArray);
 
   const currencyCode = useSelector(
     (state) => state.fundamentals.incomeStatement.currencyCode,
@@ -203,7 +204,7 @@ const RnDAmortizationConverter = () => {
   }, [initialAmortizationPeriod]);
 
   useEffect(() => {
-    setDataRow(getInitialData(incomeStatementsArray, amortizationPeriod));
+    setDataRow(getDataRows(incomeStatementsArray, amortizationPeriod));
     setSumValueOfResearchAsset(
       getSumValueOfResearchAsset(incomeStatementsArray, amortizationPeriod),
     );
@@ -217,10 +218,14 @@ const RnDAmortizationConverter = () => {
 
   useEffect(() => {
     dispatch(setRndAdjustmentToOperatingIncome(adjustmentToOperatingIncome));
-  }, [adjustmentToOperatingIncome]);
+  }, [adjustmentToOperatingIncome, dispatch]);
+
+  useEffect(() => {
+    setDataRow(getDataRows(userEdits, amortizationPeriod));
+  }, [userEdits, amortizationPeriod]);
 
   const resetData = () =>
-    setDataRow(getInitialData(incomeStatementsArray, amortizationPeriod));
+    setDataRow(getDataRows(incomeStatementsArray, amortizationPeriod));
 
   return (
     <React.Fragment>
@@ -287,6 +292,7 @@ const RnDAmortizationConverter = () => {
           columns={amortizationIndustryColumns}
           data={dataRow}
           updateMyData={(rowIndex, columnId, value) => {
+            setUserEdits();
             setDataRow((prevState) =>
               prevState.map((row, index) => {
                 if (index === rowIndex) {

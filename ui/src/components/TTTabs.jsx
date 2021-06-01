@@ -24,7 +24,7 @@ const TTTabs = () => {
     <Box sx={{ mt }}>
       <Paper
         elevation={3}
-        style={{
+        sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -50,6 +50,7 @@ const TTTabs = () => {
             return (
               <Tab
                 key={path}
+                sx={{ maxWidth: "300px" }}
                 component={Link}
                 to={`${value}${location.search}`}
                 value={value}
