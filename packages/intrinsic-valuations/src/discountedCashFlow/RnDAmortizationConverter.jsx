@@ -224,8 +224,9 @@ const RnDAmortizationConverter = () => {
     setDataRow(getDataRows(userEdits, amortizationPeriod));
   }, [userEdits, amortizationPeriod]);
 
+  //sets all values to zero
   const resetData = () =>
-    setDataRow(getDataRows(incomeStatementsArray, amortizationPeriod));
+    setUserEdits(getDataRows(incomeStatementsArray, amortizationPeriod));
 
   return (
     <React.Fragment>
@@ -292,8 +293,7 @@ const RnDAmortizationConverter = () => {
           columns={amortizationIndustryColumns}
           data={dataRow}
           updateMyData={(rowIndex, columnId, value) => {
-            setUserEdits();
-            setDataRow((prevState) =>
+            setUserEdits((prevState) =>
               prevState.map((row, index) => {
                 if (index === rowIndex) {
                   return {
