@@ -36,7 +36,7 @@ const amortizationIndustryColumns = [
   },
   {
     Header: "R&D Expenses (mln)",
-    accessor: "rnDExpenses",
+    accessor: "researchDevelopment",
   },
   {
     Header: "Unamortized Portion",
@@ -119,16 +119,16 @@ const getDataRows = (incomeStatementsArray, amortizationPeriod) => {
     const unamortizedPortion = 1 - currentUnamortizationPortion;
     const unamortizedValue =
       incomeStatementsArray[i].researchDevelopment * unamortizedPortion;
-    const rndExpenses = incomeStatementsArray[i].researchDevelopment;
+    const researchDevelopment = incomeStatementsArray[i].researchDevelopment;
 
     dataRow.push({
       year: {
         FormatInput: TableInputNumberFormatter,
         value: year,
       },
-      rnDExpenses: {
+      researchDevelopment: {
         FormatInput: TableInputMillionCurrencyFormatter,
-        value: rndExpenses,
+        value: researchDevelopment,
       },
       unamortizedPortion: {
         FormatInput: TableInputNumberFormatter,
@@ -180,7 +180,7 @@ const RnDAmortizationConverter = () => {
   );
   const currencySymbol = getSymbolFromCurrency(currencyCode);
   const adjustmentToOperatingIncome =
-    incomeStatementsArray[0].researchDevelopment -
+  userEdits[0].researchDevelopment -
     sumAmortizationOfResearchAssetForCurrentYear;
 
   const taxEffectOfRnDExpensing = adjustmentToOperatingIncome * marginalTaxRate;
@@ -204,17 +204,17 @@ const RnDAmortizationConverter = () => {
   }, [initialAmortizationPeriod]);
 
   useEffect(() => {
-    setDataRow(getDataRows(incomeStatementsArray, amortizationPeriod));
+    setDataRow(getDataRows(userEdits, amortizationPeriod));
     setSumValueOfResearchAsset(
-      getSumValueOfResearchAsset(incomeStatementsArray, amortizationPeriod),
+      getSumValueOfResearchAsset(userEdits, amortizationPeriod),
     );
     setSumAmortizationOfResearchAssetForCurrentYear(
       getSumAmortizationOfResearchAssetForCurrentYear(
-        incomeStatementsArray,
+        userEdits,
         amortizationPeriod,
       ),
     );
-  }, [amortizationPeriod, incomeStatementsArray]);
+  }, [amortizationPeriod, userEdits]);
 
   useEffect(() => {
     dispatch(setRndAdjustmentToOperatingIncome(adjustmentToOperatingIncome));
@@ -298,10 +298,7 @@ const RnDAmortizationConverter = () => {
                 if (index === rowIndex) {
                   return {
                     ...row,
-                    [columnId]: {
-                      ...row[columnId],
-                      value,
-                    },
+                    [columnId]: value,
                   };
                 }
                 return row;
