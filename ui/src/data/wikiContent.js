@@ -826,6 +826,39 @@ const wikiContent = [
       </>
     ),
   },
+  {
+    title: "R&D Expense",
+    cellsText: "B4",
+    text: (
+      <>
+        <Box>
+          <Typography paragraph>
+            Note: R&amp;D Expense financials are consolidated in US stocks only.
+            For non-US stocks inputs should be filled in manually.
+          </Typography>
+        </Box>
+        <Typography paragraph>
+          To value the research asset of the business, we need make an
+          assumption about the amortizable life expectancy of the research
+          asset. In accounting standards, R&amp;D considers as an operating
+          expense even though it is designed to generate future growth and
+          should be treated as capital expenditures (CAPEX).
+        </Typography>
+        <Typography paragraph>
+          To capitalize R&amp;D, specify an amortizable life for R&amp;D (2 - 10
+          years) and collect past R&amp;D expenses for as long as the
+          amortizable life. Sum up the unamortized R&amp;D over the period. For
+          example, if the amortizable life is 5 years, the research asset can be
+          obtained by adding up 1/5th of the R&amp;D expense from five years
+          ago, 2/5th of the R&amp;D expense from four years ago.
+        </Typography>
+        <Typography>
+          If R&amp;D Expense present then we add calculated R&amp;D Adjustment
+          to Operating Income to cell B4.
+        </Typography>
+      </>
+    ),
+  },
 ];
 
 export default wikiContent;
