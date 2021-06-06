@@ -50,7 +50,7 @@ const TTTabs = () => {
             return (
               <Tab
                 key={path}
-                sx={{ maxWidth: "300px" }}
+                sx={{ maxWidth: "initial" }}
                 component={Link}
                 to={`${value}${location.search}`}
                 value={value}
