@@ -13,18 +13,8 @@ export { default as IndustryAverages } from "./discountedCashFlow/IndustryAverag
 export { default as RnDAmortizationConverter } from "./discountedCashFlow/RnDAmortizationConverter";
 export { allInputNameTypeMappings } from "./discountedCashFlow/scopeNameTypeMapping";
 
-export {
-  default as ValueDrivingInputs,
-  cagrInYears_1_5Label,
-  ebitTargetMarginInYear_10Label,
-  yearOfConvergenceLabel,
-  salesToCapitalRatioLabel,
-  valueDrivingInputsHeader,
-} from "./components/ValueDrivingInputs";
-export { default as OptionalInputs } from "./components/OptionalInputs";
 export { default as IndustryAveragesResults } from "./components/IndustryAveragesResults";
 export { default as CostOfCapitalResults } from "./components/CostOfCapitalResults";
-export { default as BlackScholesResults } from "./components/BlackScholesResults";
 export { default as FinancialStatements } from "./components/FinancialStatements";
 export { default as FinancialsSummary } from "./components/FinancialsSummary";
 export { default as CompanyOverviewStats } from "./components/CompanyOverviewStats";

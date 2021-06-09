@@ -35,7 +35,9 @@ import {
   debtCalculation,
   marketValueCalculation,
   weightInCostOfCapitalCalculation,
-} from "./expressionCalculations";
+} from "./templates/freeCashFlowFirmSimple/expressionCalculations";
+import { queryNames } from "./templates/freeCashFlowFirmSimple/inputQueryNames";
+import selectSheetsValues from "../selectors/dcfSelectors/selectSheetsValues";
 
 export const DCFControlTypography = (props) => {
   const hasAllRequiredInputsFilledIn = useHasAllRequiredInputsFilledIn();
@@ -69,6 +71,7 @@ const ExportToExcel = () => {
   const price = useSelector(selectPrice);
   const sharesOutstanding = useSelector(selectSharesOutstanding);
   const hasAllRequiredInputsFilledIn = useHasAllRequiredInputsFilledIn();
+  const sheetsValues = useSelector(selectSheetsValues);
 
   const exportToCSVOnClick = async () => {
     const { utils, writeFile } = await import("xlsx/xlsx.mini");
@@ -100,9 +103,9 @@ const ExportToExcel = () => {
       interestExpense: incomeStatement.interestExpense,
       price,
       sharesOutstanding,
-      pretaxCostOfDebt: isNil(inputQueryParams.pretaxCostOfDebt)
+      pretaxCostOfDebt: isNil(inputQueryParams[queryNames.pretaxCostOfDebt])
         ? debtCalculation.estimatedCostOfDebt
-        : inputQueryParams.pretaxCostOfDebt,
+        : inputQueryParams[queryNames.pretaxCostOfDebt],
       unleveredBeta: currentIndustry.unleveredBeta,
       ...debtCalculation,
       ...marketValueCalculation,
@@ -117,6 +120,7 @@ const ExportToExcel = () => {
 
     const formatCellForExcelOutput = makeFormatCellForExcelOutput(
       valuationCurrencySymbol,
+      sheetsValues,
       Object.keys(allInputNameTypeMappings),
       costOfCapitalDataKeys,
       scope,
