@@ -37,6 +37,7 @@ For example FinancialsSummary can be removed if you have your own fundamentals p
 - `<IndustryAveragesResults />`
 - `<CostOfCapitalResults SyntheticCreditRatingLink={fn: ReactNode} />`
 - `<DiscountedCashFlowSheet />`
+- `<RnDAmortizationConverter />`
 
 Provider is the only required component and can be added at the root of your app with your other providers. This component injects the redux store and material ui theme for the components. If you provide your own theme then it needs to come from material ui's createMuiTheme.
 

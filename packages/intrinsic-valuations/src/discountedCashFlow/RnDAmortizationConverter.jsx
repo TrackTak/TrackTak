@@ -3,13 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CompanyHeading from "../components/CompanyHeading";
 import withFundamentalsLoaded from "../hoc/withFundamentalsLoaded";
 import SubSection from "../components/SubSection";
-import {
-  Box,
-  IconButton,
-  TextField,
-  Typography,
-  useTheme,
-} from "@material-ui/core";
+import { Box, TextField, Typography, useTheme } from "@material-ui/core";
 import { textFieldRootStyles } from "../shared/utils";
 import selectCurrentIndustry from "../selectors/fundamentalSelectors/selectCurrentIndustry";
 import getSymbolFromCurrency from "currency-symbol-map";
@@ -21,7 +15,6 @@ import FormatRawNumberToMillion from "../components/FormatRawNumberToMillion";
 import selectYearlyIncomeStatements from "../selectors/fundamentalSelectors/selectYearlyIncomeStatements";
 import BoldValueLabel from "../components/BoldValueLabel";
 import selectCurrentEquityRiskPremium from "../selectors/fundamentalSelectors/selectCurrentEquityRiskPremium";
-import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import EditableCell from "../components/EditableCell";
 import {
   TableInputMillionCurrencyFormatter,
@@ -180,7 +173,7 @@ const RnDAmortizationConverter = () => {
   );
   const currencySymbol = getSymbolFromCurrency(currencyCode);
   const adjustmentToOperatingIncome =
-  userEdits[0].researchDevelopment -
+    userEdits[0].researchDevelopment -
     sumAmortizationOfResearchAssetForCurrentYear;
 
   const taxEffectOfRnDExpensing = adjustmentToOperatingIncome * marginalTaxRate;
@@ -223,10 +216,6 @@ const RnDAmortizationConverter = () => {
   useEffect(() => {
     setDataRow(getDataRows(userEdits, amortizationPeriod));
   }, [userEdits, amortizationPeriod]);
-
-  //sets all values to zero
-  const resetData = () =>
-    setUserEdits(getDataRows(incomeStatementsArray, amortizationPeriod));
 
   return (
     <React.Fragment>
@@ -272,16 +261,6 @@ const RnDAmortizationConverter = () => {
           }}
           onChange={checkAmortizationYearLifeIsValid}
         />
-      </Box>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <IconButton>
-          <RotateLeftIcon
-            sx={{ width: "35px", height: "35px" }}
-            color="primary"
-            onClick={resetData}
-          />
-        </IconButton>
-        <Typography>Reset</Typography>
       </Box>
       <SubSection>
         <TTTable
