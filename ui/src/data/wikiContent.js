@@ -798,8 +798,8 @@ const wikiContent = [
       <>
         <Box>
           <Typography paragraph>
-            Note: R&amp;D Expense financials are consolidated in US stocks only.
-            For non-US stocks inputs should be filled in manually.
+            <b>Note:</b> R&amp;D Expense financials are consolidated in US
+            stocks only. For non-US stocks inputs should be filled in manually.
           </Typography>
         </Box>
         <Typography paragraph>
@@ -820,6 +820,28 @@ const wikiContent = [
         <Typography>
           If R&amp;D Expense present then we add calculated R&amp;D Adjustment
           to Operating Income to cell B4.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    title: "Invested capital",
+    cellsText: "B16",
+    text: (
+      <>
+        <Box>
+          <Typography paragraph>
+            Measures the capital invested in the operating assets of the firm
+            generated from R&amp;D activities. Reinvesting more will increase
+            the growth rate but it will increase value only if the returns
+            earned on the investments exceed their costs (cost of capital);
+            otherwise, the company is gradually destroying the capital invested
+            in it.
+          </Typography>
+        </Box>
+        <Typography>
+          If R&amp;D Expense present then we add calculated Sum of Unamortized
+          Value of Research Asset to cell B16.
         </Typography>
       </>
     ),
