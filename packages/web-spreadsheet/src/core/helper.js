@@ -1,3 +1,5 @@
+import { isNil } from "lodash-es";
+
 /* eslint-disable no-param-reassign */
 function cloneDeep(obj) {
   return JSON.parse(JSON.stringify(obj));
@@ -149,12 +151,24 @@ export function numberCalc(type, a1, a2) {
   return ret.toFixed(Math.max(al1, al2));
 }
 
-export const formatStringRender = (v) => v;
+export const formatPercentRender = (v) => {
+  if (isNil(v) || v === "") return "";
 
-export const formatNumberRender = (v) => {
+  return `${formatNumberRender(v * 100)}%`;
+};
+
+export const formatStringRender = (v) => {
+  if (isNil(v)) return "";
+
+  return v;
+};
+
+export const formatNumberRender = (v, fixedDigitNumber = 2) => {
+  if (isNil(v) || v === "") return "";
+
   // match "-12.1" or "12" or "12.1"
   if (/^(-?\d*.?\d*)$/.test(v)) {
-    const v1 = Number(v).toFixed(2).toString();
+    const v1 = Number(v).toFixed(fixedDigitNumber).toString();
     const [first, ...parts] = v1.split(".");
     return [first.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"), ...parts].join(
       ".",

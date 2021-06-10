@@ -1,12 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { padCellKeys } from "./utils";
 import { Alert, Box, useMediaQuery, useTheme, Link } from "@material-ui/core";
 import useInputQueryParams from "../hooks/useInputQueryParams";
 import selectCostOfCapital from "../selectors/fundamentalSelectors/selectCostOfCapital";
 import selectRiskFreeRate from "../selectors/fundamentalSelectors/selectRiskFreeRate";
-import selectValueOfAllOptionsOutstanding from "../selectors/fundamentalSelectors/selectValueOfAllOptionsOutstanding";
 import selectRecentIncomeStatement from "../selectors/fundamentalSelectors/selectRecentIncomeStatement";
 import selectRecentBalanceSheet from "../selectors/fundamentalSelectors/selectRecentBalanceSheet";
 import selectPrice from "../selectors/fundamentalSelectors/selectPrice";
@@ -15,99 +13,47 @@ import selectSharesOutstanding from "../selectors/fundamentalSelectors/selectSha
 import useHasAllRequiredInputsFilledIn from "../hooks/useHasAllRequiredInputsFilledIn";
 import useInjectQueryParams from "../hooks/useInjectQueryParams";
 import { AnchorLink, navigate } from "../shared/gatsby";
-import {
-  valueDrivingInputsHeader,
-  valueDrivingInputsId,
-} from "../components/ValueDrivingInputs";
 import { useLocation } from "@reach/router";
 import selectThreeAverageYearsEffectiveTaxRate from "../selectors/fundamentalSelectors/selectThreeAverageYearsEffectiveTaxRate";
 import matureMarketEquityRiskPremium from "../shared/matureMarketEquityRiskPremium";
-import sortAlphaNumeric from "./sortAlphaNumeric";
-import getChunksOfArray from "../shared/getChunksOfArray";
 import selectValuationCurrencySymbol from "../selectors/fundamentalSelectors/selectValuationCurrencySymbol";
 import selectScope from "../selectors/dcfSelectors/selectScope";
-import cells from "./cells";
-import { setCells, setScope } from "../redux/actions/dcfActions";
+import {
+  setCells,
+  setScope,
+  setSheetsSerializedValues,
+  setSheetsValues,
+} from "../redux/actions/dcfActions";
 import { isNil } from "lodash-es";
 import {
   convertFromCellIndexToLabel,
   formatNumberRender,
 } from "../../../web-spreadsheet/src/core/helper";
-import getSpreadsheet from "../../../web-spreadsheet/src";
+import getSpreadsheet, {
+  spreadsheetEvents,
+} from "../../../web-spreadsheet/src";
+import useSetURLInput from "../hooks/useSetURLInput";
+import { camelCase } from "change-case";
+import { allInputNameTypeMappings } from "./scopeNameTypeMapping";
+import { queryNames } from "./templates/freeCashFlowFirmSimple/inputQueryNames";
+import selectCurrentIndustry from "../selectors/fundamentalSelectors/selectCurrentIndustry";
+import { currencySymbolMap } from "currency-symbol-map";
+import { requiredInputsSheetName } from "./templates/freeCashFlowFirmSimple/expressionCalculations";
+import getVariablesData from "./templates/freeCashFlowFirmSimple/data/getVariablesData";
+import getEmployeeOptionsData from "./templates/freeCashFlowFirmSimple/data/getEmployeeOptionsData";
+import getDCFValuationData from "./templates/freeCashFlowFirmSimple/data/getDCFValuationData";
 
-const defaultColWidth = 110;
-const columnAWidth = 170;
-
-const columns = [];
-
-for (let index = 0; index < 13; index++) {
-  columns.push({ width: index === 0 ? 220 : defaultColWidth });
-}
-
-const styleMap = {
-  percent: 0,
-  million: 1,
-  "million-currency": 2,
-  currency: 3,
-  number: 4,
-  year: 4,
-};
-
-const cellKeysSorted = padCellKeys(Object.keys(cells).sort(sortAlphaNumeric));
-const rowCells = cellKeysSorted.map((key) => {
-  const cell = cells[key];
-
-  return {
-    text: cell?.expr ?? cell?.value ?? "",
-    style: styleMap[cell?.type],
-  };
-});
-
+const requiredInputsId = "required-inputs";
 const dcfValuationId = "dcf-valuation";
+const columnAWidth = 170;
+const defaultColWidth = 110;
+const million = 1000000;
+
 const getDataSheets = (isOnMobile) => {
-  const rows = {};
-
-  getChunksOfArray(rowCells, columns.length).forEach((data, i) => {
-    rows[i] = {
-      cells: data,
-    };
-  });
-
   const dataSheets = [
-    {
-      name: "DCF Valuation",
-      cols: {
-        0: {
-          width: columnAWidth,
-        },
-      },
-      rows,
-      styles: [
-        {
-          format: "percent",
-        },
-        {
-          format: "million",
-        },
-        {
-          format: "million-currency",
-        },
-        {
-          format: "currency",
-        },
-        {
-          format: "number",
-        },
-      ],
-    },
+    getDCFValuationData(isOnMobile),
+    getEmployeeOptionsData(),
   ];
-
-  // Do not put this as a ternary with undefined on the data
-  // the moronic chinese coder is checking for existence of keys
-  // so it will crash... :(
-  if (!isOnMobile) {
-    dataSheets[0].freeze = "B38";
-  }
 
   return dataSheets;
 };
@@ -144,35 +90,36 @@ const getDatasheetsYOYGrowth = (spreadsheet, isOnMobile) => {
     Object.keys(dataSheet.rows).forEach((rowKey) => {
       const cells = dataSheet.rows[rowKey].cells;
       const formulaRow = formulaSheet[rowKey];
+      if (Array.isArray(cells)) {
+        newRows[rowKey] = {
+          ...dataSheet.rows[rowKey],
+          cells: cells.map((cell, i) => {
+            const previousFormulaValue = formulaRow[i - 1]
+              ? formulaRow[i - 1]
+              : null;
+            let currentFormulaValue = formulaRow[i];
 
-      newRows[rowKey] = {
-        ...dataSheet.rows[rowKey],
-        cells: cells.map((cell, i) => {
-          const previousFormulaValue = formulaRow[i - 1]
-            ? formulaRow[i - 1]
-            : null;
-          let currentFormulaValue = formulaRow[i];
+            if (
+              typeof previousFormulaValue === "number" &&
+              typeof currentFormulaValue === "number" &&
+              (rowKey !== "0" || dataSheetIndex !== 0)
+            ) {
+              return {
+                ...cell,
+                text:
+                  (currentFormulaValue - previousFormulaValue) /
+                  currentFormulaValue,
+                style: 0,
+              };
+            }
 
-          if (
-            typeof previousFormulaValue === "number" &&
-            typeof currentFormulaValue === "number" &&
-            (rowKey !== "0" || dataSheetIndex !== 0)
-          ) {
             return {
               ...cell,
-              text:
-                (currentFormulaValue - previousFormulaValue) /
-                currentFormulaValue,
-              style: styleMap.percent,
+              text: currentFormulaValue,
             };
-          }
-
-          return {
-            ...cell,
-            text: currentFormulaValue,
-          };
-        }),
-      };
+          }),
+        };
+      }
     });
     return {
       ...dataSheet,
@@ -187,7 +134,6 @@ const DiscountedCashFlowTable = ({
   showFormulas,
   showYOYGrowth,
   SubscribeCover,
-  loadingCells,
 }) => {
   const containerRef = useRef();
   const [spreadsheet, setSpreadsheet] = useState();
@@ -205,13 +151,25 @@ const DiscountedCashFlowTable = ({
   const costOfCapital = useInjectQueryParams(selectCostOfCapital);
   const riskFreeRate = useSelector(selectRiskFreeRate);
   const sharesOutstanding = useSelector(selectSharesOutstanding);
-  const valueOfAllOptionsOutstanding = useInjectQueryParams(
-    selectValueOfAllOptionsOutstanding,
-  );
   const hasAllRequiredInputsFilledIn = useHasAllRequiredInputsFilledIn();
   const pastThreeYearsAverageEffectiveTaxRate = useSelector(
     selectThreeAverageYearsEffectiveTaxRate,
   );
+  const setURLInput = useSetURLInput();
+  const isFocusedOnValueDrivingInputs = location.hash?.includes(
+    requiredInputsId,
+  );
+  const currentIndustry = useSelector(selectCurrentIndustry);
+
+  useEffect(() => {
+    if (isNil(inputQueryParams[queryNames.salesToCapitalRatio])) {
+      setURLInput(
+        queryNames.salesToCapitalRatio,
+        currentIndustry["sales/Capital"],
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     let spreadsheet;
@@ -220,58 +178,129 @@ const DiscountedCashFlowTable = ({
 
     const formats = {
       currency: {
+        key: "currency",
         title: () => "Currency",
         type: "number",
         format: "currency",
         label: `${currencySymbol}10.00`,
-        render: (v) => currencySymbol + formatNumberRender(v),
+        editRender: (v) => {
+          if (v.toString().charAt(0) === currencySymbol) {
+            return v;
+          }
+
+          let text = parseFloat(v, 10);
+
+          if (isNaN(text)) return v;
+
+          text = v.toString();
+
+          return !text.includes(currencySymbol) ? currencySymbol + text : v;
+        },
+        render: (v) => {
+          if (isNil(v) || v === "") return "";
+
+          return currencySymbol + formatNumberRender(v);
+        },
       },
       million: {
+        key: "million",
         title: () => "Million",
         format: "million",
         type: "number",
         label: "(000)",
-        render: (v) => formatNumberRender(v) / 1000000,
+        editRender: (v, state) => {
+          let number = parseFloat(v, 10);
+
+          if (isNaN(number)) return v;
+
+          if (state === "start") {
+            return (number / million).toString();
+          }
+
+          if (state === "startInput" || state === "finished") {
+            return number * million.toString();
+          }
+
+          return v.toString();
+        },
+        render: (v) => {
+          if (isNil(v) || v === "") return "";
+
+          return formatNumberRender(v / million);
+        },
       },
       "million-currency": {
+        key: "million-currency",
         title: () => "Million Currency",
         format: "million-currency",
         type: "number",
         label: `${currencySymbol}(000)`,
+        editRender: (v, state) => {
+          const currencyText = formats.currency.editRender(v);
+          const text = formats.million.editRender(
+            currencyText.substring(1),
+            state,
+          );
+
+          return currencyText.charAt(0) + text;
+        },
         render: (v) => {
-          const value = v / 1000000;
+          if (isNil(v) || v === "") return "";
+
+          const value = v / million;
 
           return formats.currency.render(value);
         },
       },
     };
 
+    const width = () => {
+      if (containerRef?.current) {
+        const containerStyle = getComputedStyle(containerRef.current);
+        const paddingX =
+          parseFloat(containerStyle.paddingLeft) +
+          parseFloat(containerStyle.paddingRight);
+        const borderX =
+          parseFloat(containerStyle.borderLeftWidth) +
+          parseFloat(containerStyle.borderRightWidth);
+        const elementWidth =
+          containerRef.current.offsetWidth - paddingX - borderX;
+
+        return elementWidth;
+      }
+    };
+    const debugMode = process.env.NODE_ENV === "development";
+
     const options = {
+      debugMode,
       col: {
         width: defaultColWidth,
       },
       formats,
       view: {
-        height: () => 1165,
-        width: () => {
-          if (containerRef?.current) {
-            const containerStyle = getComputedStyle(containerRef.current);
-            const paddingX =
-              parseFloat(containerStyle.paddingLeft) +
-              parseFloat(containerStyle.paddingRight);
-            const borderX =
-              parseFloat(containerStyle.borderLeftWidth) +
-              parseFloat(containerStyle.borderRightWidth);
-            const elementWidth =
-              containerRef.current.offsetWidth - paddingX - borderX;
-
-            return elementWidth;
-          }
-        },
+        height: () => 1250,
+        width,
       },
     };
 
-    spreadsheet = getSpreadsheet(dcfValuationElement, options);
+    const variablesSpreadsheetOptions = {
+      debugMode,
+      formats,
+      view: {
+        width,
+      },
+    };
+
+    spreadsheet = getSpreadsheet(
+      dcfValuationElement,
+      options,
+      variablesSpreadsheetOptions,
+      {
+        currencySymbol: Object.values(currencySymbolMap),
+      },
+    );
+
+    spreadsheet.variablesSpreadsheet.sheet.el.el.id = requiredInputsId;
 
     setSpreadsheet(spreadsheet);
 
@@ -279,6 +308,63 @@ const DiscountedCashFlowTable = ({
       spreadsheet?.destroy();
     };
   }, [currencySymbol]);
+
+  useEffect(() => {
+    const cellEditedCallback = ({ cellAddress, value }) => {
+      // We will use this later to allow users to save their
+      // sheets. For now it's to make it easier for us to create
+      // our templates.
+      if (process.env.NODE_ENV === "development") {
+        console.log("datas: ", spreadsheet.getDatas());
+      }
+
+      let label = spreadsheet.hyperformula.getCellValue({
+        ...cellAddress,
+        col: cellAddress.col - 1,
+      });
+
+      // TODO: Remove later
+      if (label) {
+        if (label.includes("Operating Target Margin")) {
+          label = "EBIT Target Margin in Year 10";
+        }
+
+        const urlName = camelCase(label);
+
+        if (allInputNameTypeMappings[urlName]) {
+          let newValue = value;
+
+          setURLInput(camelCase(label), newValue);
+        }
+      }
+    };
+
+    if (spreadsheet) {
+      spreadsheet.variablesSpreadsheet.eventEmitter.on(
+        spreadsheetEvents.sheet.cellEdited,
+        cellEditedCallback,
+      );
+    }
+
+    return () => {
+      if (spreadsheet) {
+        spreadsheet.variablesSpreadsheet.eventEmitter.off(
+          spreadsheetEvents.sheet.cellEdited,
+          cellEditedCallback,
+        );
+      }
+    };
+  }, [setURLInput, spreadsheet]);
+
+  useEffect(() => {
+    if (spreadsheet) {
+      // Disable main sheet editing on mobile for now
+      // until we make mobile have better UX
+      spreadsheet.setOptions({
+        mode: isOnMobile ? "read" : "edit",
+      });
+    }
+  }, [isOnMobile, spreadsheet]);
 
   useEffect(() => {
     if (!hasAllRequiredInputsFilledIn && spreadsheet) {
@@ -291,12 +377,9 @@ const DiscountedCashFlowTable = ({
       spreadsheet.setOptions({
         variables: scope,
       });
-
       const dataSheets = getDataSheets(isOnMobile);
 
-      if (!spreadsheet.sheet.datas.length) {
-        spreadsheet.setDatasheets(dataSheets);
-      }
+      spreadsheet.setDatasheets(dataSheets);
 
       const sheetName = "DCF Valuation";
       const dataSheetFormulas = spreadsheet.hyperformula.getAllSheetsFormulas();
@@ -307,7 +390,7 @@ const DiscountedCashFlowTable = ({
         columns.forEach((_, columnIndex) => {
           const label = convertFromCellIndexToLabel(columnIndex, rowIndex + 1);
           const expr = dataSheetFormulas[sheetName][rowIndex][columnIndex];
-          const value = dataSheetValues[sheetName][rowIndex][columnIndex];
+          let value = dataSheetValues[sheetName][rowIndex][columnIndex];
 
           cells[label] = {
             ...cells[label],
@@ -318,54 +401,29 @@ const DiscountedCashFlowTable = ({
       });
 
       dispatch(setCells(cells));
+      dispatch(
+        setSheetsSerializedValues(
+          spreadsheet.hyperformula.getAllSheetsSerialized(),
+        ),
+      );
+      dispatch(setSheetsValues(spreadsheet.hyperformula.getAllSheetsValues()));
     }
-  }, [hasAllRequiredInputsFilledIn, isOnMobile, scope, spreadsheet, dispatch]);
+  }, [hasAllRequiredInputsFilledIn, isOnMobile, spreadsheet, dispatch, scope]);
 
   useEffect(() => {
     if (spreadsheet) {
-      // spreadsheet.setVariablesData([
-      //   {
-      //     name: "Inputs",
-      //     rows: {
-      //       0: {
-      //         cells: [
-      //           {
-      //             text: "CAGR Year 1-5",
-      //           },
-      //         ],
-      //       },
-      //     },
-      //   },
-      //   {
-      //     name: "Optional Inputs",
-      //     rows: {
-      //       0: {
-      //         cells: [
-      //           {
-      //             text: "Debt",
-      //           },
-      //         ],
-      //       },
-      //     },
-      //   },
-      //   {
-      //     name: "API",
-      //     rows: {
-      //       0: {
-      //         cells: [
-      //           {
-      //             text: "totalRevenue",
-      //           },
-      //         ],
-      //       },
-      //     },
-      //   },
-      // ]);
+      spreadsheet.variablesSpreadsheet.setVariableDatasheets(
+        getVariablesData(inputQueryParams),
+      );
     }
-  }, [spreadsheet]);
+  }, [inputQueryParams, spreadsheet]);
 
   useEffect(() => {
-    if (spreadsheet && hasAllRequiredInputsFilledIn) {
+    if (spreadsheet && hasAllRequiredInputsFilledIn && scope) {
+      spreadsheet.setOptions({
+        variables: scope,
+      });
+
       if (showYOYGrowth) {
         spreadsheet.setDatasheets(
           getDatasheetsYOYGrowth(spreadsheet, isOnMobile),
@@ -381,6 +439,8 @@ const DiscountedCashFlowTable = ({
         });
         spreadsheet.setDatasheets(getDataSheets(isOnMobile));
       }
+      // TODO: refactor this cause it's terrible
+      spreadsheet.sheet.switchData(spreadsheet.sheet.getDatas()[0]);
     }
   }, [
     showYOYGrowth,
@@ -388,6 +448,7 @@ const DiscountedCashFlowTable = ({
     isOnMobile,
     hasAllRequiredInputsFilledIn,
     showFormulas,
+    scope,
   ]);
 
   useEffect(() => {
@@ -399,6 +460,8 @@ const DiscountedCashFlowTable = ({
     ) {
       dispatch(
         setScope({
+          standardDeviationInStockPrices:
+            currentIndustry.standardDeviationInStockPrices,
           matureMarketEquityRiskPremium,
           pastThreeYearsAverageEffectiveTaxRate,
           totalRevenue: incomeStatement.totalRevenue,
@@ -410,19 +473,20 @@ const DiscountedCashFlowTable = ({
           marginalTaxRate: currentEquityRiskPremium.marginalTaxRate,
           sharesOutstanding,
           price,
-          cagrInYears_1_5: inputQueryParams.cagrInYears_1_5,
-          riskFreeRate,
-          yearOfConvergence: inputQueryParams.yearOfConvergence,
-          ebitTargetMarginInYear_10: inputQueryParams.ebitTargetMarginInYear_10,
-          totalCostOfCapital: costOfCapital.totalCostOfCapital,
-          salesToCapitalRatio: inputQueryParams.salesToCapitalRatio,
-          nonOperatingAssets: inputQueryParams.nonOperatingAssets,
-          netOperatingLoss: inputQueryParams.netOperatingLoss,
-          probabilityOfFailure: inputQueryParams.probabilityOfFailure,
-          proceedsAsAPercentageOfBookValue:
-            inputQueryParams.proceedsAsAPercentageOfBookValue,
           bookValueOfEquity: balanceSheet.bookValueOfEquity,
-          valueOfAllOptionsOutstanding,
+          riskFreeRate,
+          totalCostOfCapital: costOfCapital.totalCostOfCapital,
+          cagrInYears_1_5: inputQueryParams[queryNames.cagrInYears_1_5],
+          yearOfConvergence: inputQueryParams[queryNames.yearOfConvergence],
+          ebitTargetMarginInYear_10:
+            inputQueryParams[queryNames.ebitTargetMarginInYear_10],
+          salesToCapitalRatio: inputQueryParams[queryNames.salesToCapitalRatio],
+          nonOperatingAssets: inputQueryParams[queryNames.nonOperatingAssets],
+          netOperatingLoss: inputQueryParams[queryNames.netOperatingLoss],
+          probabilityOfFailure:
+            inputQueryParams[queryNames.probabilityOfFailure],
+          proceedsAsAPercentageOfBookValue:
+            inputQueryParams[queryNames.proceedsAsAPercentageOfBookValue],
         }),
       );
     }
@@ -437,34 +501,42 @@ const DiscountedCashFlowTable = ({
     dispatch,
     incomeStatement.operatingIncome,
     incomeStatement.totalRevenue,
-    inputQueryParams.cagrInYears_1_5,
-    inputQueryParams.ebitTargetMarginInYear_10,
-    inputQueryParams.netOperatingLoss,
-    inputQueryParams.probabilityOfFailure,
-    inputQueryParams.proceedsAsAPercentageOfBookValue,
-    inputQueryParams.salesToCapitalRatio,
-    inputQueryParams.yearOfConvergence,
     pastThreeYearsAverageEffectiveTaxRate,
     price,
     riskFreeRate,
     sharesOutstanding,
-    valueOfAllOptionsOutstanding,
     hasAllRequiredInputsFilledIn,
-    inputQueryParams.nonOperatingAssets,
+    inputQueryParams,
+    currentIndustry.standardDeviationInStockPrices,
   ]);
 
-  const to = `${location.pathname}#${valueDrivingInputsId}`;
+  const to = `${location.pathname}#${requiredInputsId}`;
+  const zIndex = 100;
 
   return (
-    <Box sx={{ position: "relative" }} ref={containerRef}>
-      <Box
-        id={dcfValuationId}
-        sx={{
-          pointerEvents:
-            !hasAllRequiredInputsFilledIn || loadingCells ? "none" : undefined,
-        }}
-      />
-      {SubscribeCover ? <SubscribeCover /> : null}
+    <Box
+      sx={{
+        position: "relative",
+        "& .x-spreadsheet-comment": {
+          fontFamily: theme.typography.fontFamily,
+        },
+        "& .x-spreadsheet-variables-sheet": isFocusedOnValueDrivingInputs
+          ? {
+              boxShadow: `0 0 5px ${theme.palette.primary.main}`,
+              border: `1px solid ${theme.palette.primary.main}`,
+            }
+          : {},
+      }}
+      ref={containerRef}
+    >
+      <Box id={dcfValuationId} />
+      {SubscribeCover ? (
+        <SubscribeCover
+          sx={{
+            zIndex,
+          }}
+        />
+      ) : null}
       {!hasAllRequiredInputsFilledIn && (
         <Alert
           severity="warning"
@@ -472,6 +544,7 @@ const DiscountedCashFlowTable = ({
             position: "absolute",
             left: "50%",
             top: "50%",
+            zIndex,
             transform: "translate(-50%, -50%)",
             "& .MuiAlert-icon": {
               alignItems: "center",
@@ -489,9 +562,9 @@ const DiscountedCashFlowTable = ({
               navigate(to);
             }}
           >
-            {valueDrivingInputsHeader}
+            {requiredInputsSheetName.slice(0, -1)}
           </Link>
-          &nbsp;section above needs to be filled out first to generate the DCF.
+          &nbsp;cells above need to be filled out first to generate your DCF.
         </Alert>
       )}
     </Box>
