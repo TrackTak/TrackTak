@@ -818,8 +818,8 @@ const wikiContent = [
           ago, 2/5th of the R&amp;D expense from four years ago.
         </Typography>
         <Typography>
-          If R&amp;D Expense present then we add calculated R&amp;D Adjustment
-          to Operating Income to cell B4.
+          If R&amp;D Expense is present then we add calculated R&amp;D
+          Adjustment to Operating Income to cell B4.
         </Typography>
       </>
     ),
@@ -840,8 +840,8 @@ const wikiContent = [
           </Typography>
         </Box>
         <Typography>
-          If R&amp;D Expense present then we add calculated Sum of Unamortized
-          Value of Research Asset to cell B16.
+          If R&amp;D Expense is present then we add calculated Sum of
+          Unamortized Value of Research Asset to cell B16.
         </Typography>
       </>
     ),
