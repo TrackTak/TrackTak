@@ -1,0 +1,90 @@
+version: 0.2
+
+# run-as: Linux-user-name
+
+env:
+  shell: bash
+  parameter-store:
+    key: /common/staging/GATSBY_API_BASE_URL
+    key: /common/staging/GATSBY_APP_SUBDOMAIN_URL
+    key: /common/staging/GATSBY_COGNITO_APP_CLIENT_ID
+    key: /common/staging/GATSBY_COGNITO_COOKIE_DOMAIN
+    key: /common/staging/GATSBY_COGNITO_USER_POOL_ID
+    key: /common/staging/GATSBY_DOMAIN_URL
+    key: /common/staging/GATSBY_PREMIUM_ENABLED
+    key: /database/staging/DATABASE_HOST
+    key: /database/staging/DATABASE_NAME
+    key: /database/staging/DATABASE_PASSWORD
+    key: /database/staging/DATABASE_USER
+    key: /node/staging/EOD_HISTORICAL_DATA_API_KEY
+    key: /node/staging/REGION
+    key: /node/staging/STRIPE_AUTH_SECRET_KEY
+    key: /node/staging/STRIPE_WEBHOOK_SECRET
+    key: /ui/staging/CONTENTFUL_API_KEY
+    key: /ui/staging/GATSBY_SOCIAL_LOGIN_FACEBOOK
+    key: /ui/staging/GATSBY_SOCIAL_LOGIN_GOOGLE
+
+phases:
+  # install:
+  #   on-failure: ABORT
+  #   runtime-versions:
+  #     nodejs: 14.x
+  #   commands:
+  #     - command
+  #     - command
+  #   finally:
+  #     - command
+  #     - command
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - yarn install
+  build:
+    on-failure: ABORT
+    commands:
+      - lerna build
+  # post_build:
+  #   run-as: Linux-user-name
+  #   on-failure: ABORT | CONTINUE
+  #   commands:
+  #     - command
+  #     - command
+  #   finally:
+  #     - command
+  #     - command
+# reports:
+#   report-group-name-or-arn:
+#     files:
+#       - location
+#       - location
+#     base-directory: location
+#     discard-paths: no | yes
+#     file-format: report-format
+# artifacts:
+#   files:
+#     - location
+#     - location
+#   name: artifact-name
+#   discard-paths: no | yes
+#   base-directory: location
+#   exclude-paths: excluded paths
+#   enable-symlinks: no | yes
+#   s3-prefix: prefix
+#   secondary-artifacts:
+#     artifactIdentifier:
+#       files:
+#         - location
+#         - location
+#       name: secondary-artifact-name
+#       discard-paths: no | yes
+#       base-directory: location
+#     artifactIdentifier:
+#       files:
+#         - location
+#         - location
+#       discard-paths: no | yes
+#       base-directory: location
+# cache:
+#   paths:
+#     - path
+#     - path
