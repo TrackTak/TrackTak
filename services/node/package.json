@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node --es-module-specifier-resolution=node ./src/app.js",
+    "start": "./node_modules/.bin/env-cmd -f .env node --es-module-specifier-resolution=node ./src/app.js",
     "develop": "cross-env NODE_ENV=development nodemon --es-module-specifier-resolution=node ./src/app.js"
   },
   "dependencies": {
@@ -14,16 +14,17 @@
     "cross-env": "^7.0.3",
     "dayjs": "^1.9.7",
     "dotenv": "^8.2.0",
+    "env-cmd": "^10.1.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
+    "find-yarn-workspace-root": "^2.0.0",
     "iso-3166-1-alpha-2": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.5",
     "lodash": "^4.17.21",
     "memory-cache": "^0.2.0",
     "mongodb": "^3.6.9",
-    "stripe": "^8.178.0",
-    "find-yarn-workspace-root": "^2.0.0"
+    "stripe": "^8.178.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

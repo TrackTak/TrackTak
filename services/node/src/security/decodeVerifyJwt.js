@@ -5,6 +5,9 @@ import { default as jwkToPem } from 'jwk-to-pem'
 const cognitoIssuerUri = process.env.COGNITO_ISSUER_URI
 const cognitoPoolId = process.env.COGNITO_USER_POOL_ID
 
+console.log('TEST process.env')
+console.log(process.env)
+
 if (!cognitoPoolId || !cognitoIssuerUri) {
   throw new Error('env var required for cognito pool and issuer URL')
 }

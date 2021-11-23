@@ -5,8 +5,10 @@ phases:
     on-failure: ABORT
     commands:
       - echo "Build Node"
+      - chmod +x services/node/.platform/hooks/predeploy/update_environment_vars.sh
 artifacts:
   files:
     - 'src/**/*'
     - 'package.json'
+    - '.platform/**/*'
   base-directory: 'services/node'
