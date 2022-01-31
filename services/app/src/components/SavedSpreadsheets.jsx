@@ -17,7 +17,8 @@ import {
   IconButton,
   ListItemIcon,
   FormControl,
-  Input
+  Input,
+  Tooltip
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove'
@@ -33,8 +34,10 @@ import AddIcon from '@mui/icons-material/Add'
 import { Link } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
 import GridOnIcon from '@mui/icons-material/GridOn'
-import dayjs from 'dayjs'
+import ShareIcon from '@mui/icons-material/Share'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import dayjs from 'dayjs'
+import ShareModelDialog from './ShareModelDialog'
 
 const SavedSpreadsheets = () => {
   const theme = useTheme()
@@ -46,6 +49,7 @@ const SavedSpreadsheets = () => {
   const [spreadsheets, setSpreadsheets] = useState([])
   const [name, setName] = useState()
   const [openModalFolder, setOpenModalFolder] = useState(false)
+  const [openShareModelDialog, setOpenShareModelDialog] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const inputRef = useRef()
   const [currentEditableSpreadsheetId, setCurrentEditableSpreadsheetId] =
@@ -134,6 +138,17 @@ const SavedSpreadsheets = () => {
 
   const handleOnClickOpenModal = () => {
     setOpenModalFolder(true)
+    setAnchorEl(null)
+  }
+
+  const handleOnClickOpenShareModelDialog = e => {
+    e.stopPropagation()
+    setOpenShareModelDialog(true)
+    setAnchorEl(null)
+  }
+
+  const handleOnClickShareModelDialog = () => {
+    setOpenShareModelDialog(false)
     setAnchorEl(null)
   }
 
@@ -240,6 +255,7 @@ const SavedSpreadsheets = () => {
                     Last Modified
                   </TableCell>
                   <TableCell style={cellHeaderStyle} align='right' />
+                  <TableCell style={cellHeaderStyle} align='right' />
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -297,15 +313,26 @@ const SavedSpreadsheets = () => {
                           )}
                         </TableCell>
                         <TableCell align='right'>
-                          <IconButton
-                            color='primary'
-                            aria-haspopup='true'
-                            aria-expanded={open ? 'true' : undefined}
-                            variant='contained'
-                            onClick={handleOnClickAnchor(spreadsheet)}
-                          >
-                            <MoreHorizIcon />
-                          </IconButton>
+                          <Tooltip title='Share model' arrow>
+                            <IconButton
+                              onClick={handleOnClickOpenShareModelDialog}
+                            >
+                              <ShareIcon fontSize='small' />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell align='right'>
+                          <Tooltip title='Options' arrow>
+                            <IconButton
+                              color='primary'
+                              aria-haspopup='true'
+                              aria-expanded={open ? 'true' : undefined}
+                              variant='contained'
+                              onClick={handleOnClickAnchor(spreadsheet)}
+                            >
+                              <MoreHorizIcon />
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                       </TableRow>
                     )
@@ -394,6 +421,16 @@ const SavedSpreadsheets = () => {
               </Box>
             </Box>
           </Modal>
+          {spreadsheets.map(spreadsheet => {
+            return (
+              <ShareModelDialog
+                key={spreadsheet._id}
+                spreadsheet={spreadsheet}
+                openShareModelDialog={openShareModelDialog}
+                handleOnClickShareModelDialog={handleOnClickShareModelDialog}
+              />
+            )
+          })}
         </>
       ) : (
         <Templates />
