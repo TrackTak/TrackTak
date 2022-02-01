@@ -12,12 +12,14 @@ import {
 import React, { useState } from 'react'
 import LinkRoundedIcon from '@mui/icons-material/LinkRounded'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import { useNavigate } from 'react-router'
 
 const ShareModelDialog = ({
   openShareModelDialog,
-  handleOnClickShareModelDialog,
-  spreadsheet
+  handleOnClickCloseShareModelDialog,
+  selectedSpreadsheet
 }) => {
+  const navigate = useNavigate()
   const [copiedText, setCopiedText] = useState()
   const [checked, setChecked] = useState(false)
 
@@ -25,14 +27,21 @@ const ShareModelDialog = ({
     setChecked(e.target.checked)
   }
 
-  const handleOnClickCopy = async () => {
-    await navigator.clipboard.writeText('Copy this text to clipboard')
+  const sharedSpreadsheet = () => {
+    navigate(`/shared/spreadsheets/${selectedSpreadsheet._id}`)
+  }
 
-    setCopiedText('Copy this text to clipboard')
+  const handleOnClickCopy = async () => {
+    await navigator.clipboard.writeText(sharedSpreadsheet)
+
+    setCopiedText(sharedSpreadsheet)
   }
 
   return (
-    <Modal open={openShareModelDialog} onClose={handleOnClickShareModelDialog}>
+    <Modal
+      open={openShareModelDialog}
+      onClose={handleOnClickCloseShareModelDialog}
+    >
       <Box
         sx={{
           position: 'absolute',
@@ -56,7 +65,7 @@ const ShareModelDialog = ({
           component='h2'
           sx={{ fontWeight: 'bold', mb: 2 }}
         >
-          {`Share "${spreadsheet.sheetData.name}"`}
+          {`Share "${selectedSpreadsheet?.sheetData.name}"`}
         </Typography>
         <Divider />
         <Grid container wrap='nowrap' spacing={2} sx={{ mt: 2 }}>

@@ -141,13 +141,15 @@ const SavedSpreadsheets = () => {
     setAnchorEl(null)
   }
 
-  const handleOnClickOpenShareModelDialog = e => {
+  const handleOnClickOpenShareModelDialog = spreadsheet => e => {
     e.stopPropagation()
+
+    setSelectedSpreadsheet(spreadsheet)
     setOpenShareModelDialog(true)
     setAnchorEl(null)
   }
 
-  const handleOnClickShareModelDialog = () => {
+  const handleOnClickCloseShareModelDialog = () => {
     setOpenShareModelDialog(false)
     setAnchorEl(null)
   }
@@ -315,7 +317,9 @@ const SavedSpreadsheets = () => {
                         <TableCell align='right'>
                           <Tooltip title='Share model' arrow>
                             <IconButton
-                              onClick={handleOnClickOpenShareModelDialog}
+                              onClick={handleOnClickOpenShareModelDialog(
+                                spreadsheet
+                              )}
                             >
                               <ShareIcon fontSize='small' />
                             </IconButton>
@@ -421,16 +425,13 @@ const SavedSpreadsheets = () => {
               </Box>
             </Box>
           </Modal>
-          {spreadsheets.map(spreadsheet => {
-            return (
-              <ShareModelDialog
-                key={spreadsheet._id}
-                spreadsheet={spreadsheet}
-                openShareModelDialog={openShareModelDialog}
-                handleOnClickShareModelDialog={handleOnClickShareModelDialog}
-              />
-            )
-          })}
+          <ShareModelDialog
+            selectedSpreadsheet={selectedSpreadsheet}
+            openShareModelDialog={openShareModelDialog}
+            handleOnClickCloseShareModelDialog={
+              handleOnClickCloseShareModelDialog
+            }
+          />
         </>
       ) : (
         <Templates />
