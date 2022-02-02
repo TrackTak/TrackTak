@@ -38,6 +38,14 @@ const Index = () => {
               }
             />
             <Route
+              path='/shared/spreadsheets/:id'
+              element={
+                <LayoutFullScreen>
+                  <FinancialModel />
+                </LayoutFullScreen>
+              }
+            />
+            <Route
               path='pricing'
               element={
                 <LayoutXL header={<AuthenticatedHeader />}>
