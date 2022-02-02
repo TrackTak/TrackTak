@@ -12,14 +12,12 @@ import {
 import React, { useState } from 'react'
 import LinkRoundedIcon from '@mui/icons-material/LinkRounded'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import { useNavigate } from 'react-router'
 
 const ShareModelDialog = ({
   openShareModelDialog,
   handleOnClickCloseShareModelDialog,
   selectedSpreadsheet
 }) => {
-  const navigate = useNavigate()
   const [copiedText, setCopiedText] = useState()
   const [checked, setChecked] = useState(false)
 
@@ -27,11 +25,8 @@ const ShareModelDialog = ({
     setChecked(e.target.checked)
   }
 
-  const sharedSpreadsheet = () => {
-    navigate(`/shared/spreadsheets/${selectedSpreadsheet._id}`)
-  }
-
   const handleOnClickCopy = async () => {
+    const sharedSpreadsheet = `${window.location.origin}/shared/spreadsheets/${selectedSpreadsheet._id}`
     await navigator.clipboard.writeText(sharedSpreadsheet)
 
     setCopiedText(sharedSpreadsheet)

@@ -1456,7 +1456,7 @@
         "values": [
           {
             "syntaxName": "governmentBondRate",
-            "description": "Accepts government bond yield. Example: US 10Y Government Bond has a 1.733% yield or use tractak's function BOND.GET_COUNTRY_YIELD(\"US\",\"10yr\") to get the bond rate."
+            "description": "Accepts government bond yield. Example: US 10Y Government Bond has a 1.733% yield or use tracktak's function BOND.GET_COUNTRY_YIELD(\"US\",\"10yr\") to get the bond rate."
           },
           {
             "syntaxName": "inflationRate",

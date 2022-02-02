@@ -38,7 +38,7 @@ const Index = () => {
               }
             />
             <Route
-              path='/shared/spreadsheets/:id'
+              path='/shared/spreadsheets/:sheetId'
               element={
                 <LayoutFullScreen>
                   <FinancialModel />
