@@ -38,8 +38,11 @@
         "2_1": {
           "cellValue": null,
           "metadata": {
-            "backgroundColor": "#8ff1d2",
-            "comment": "Example: \"AAPL\", \"BP.LSE\", \"KME.AU\" etc. For non-us companies you must supply the exchange as well. See the 'exchanges' section in the helper panel (? icon in the toolbar) to the right for the list of valid exchanges that can be given here."
+            "cellDataType": {
+              "type": "autocomplete",
+              "cellContent": "=AUTOCOMPLETE.STOCK_SEARCH()"
+            },
+            "backgroundColor": "#8ff1d2"
           }
         },
         "2_2": {
@@ -3151,9 +3154,7 @@
         }
       },
       "sheetMetadata": {
-        "rowSizes": {
-          "13": 76
-        },
+        "rowSizes": {},
         "colSizes": {
           "0": 196,
           "7": 76
@@ -16007,1404 +16008,1405 @@
       }
     },
     "Cost of Capital": {
-      "cells": {
-        "0_0": {
-          "cellValue": "Estimated Cost of Capital",
-          "metadata": {
-            "horizontalTextAlign": "center",
-            "underline": true,
-            "bold": true
-          }
-        },
-        "1_0": {
-          "cellValue": "Equity",
-          "metadata": {
-            "bold": true,
-            "underline": true
-          }
-        },
-        "2_0": {
-          "cellValue": "Number of Shares Outstanding"
-        },
-        "2_1": {
-          "cellValue": "='Helper Data'!$B$6",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "2_2": {
-          "cellValue": "Country ISO"
-        },
-        "2_3": {
-          "cellValue": "=STOCK.GET_COMPANY_INFO('DCF Valuation'!$B$3, \"countryISO\")"
-        },
-        "3_0": {
-          "cellValue": "Market Price per Share"
-        },
-        "3_1": {
-          "cellValue": "='Helper Data'!$B$12",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "3_2": {
-          "cellValue": "10 yr gov. bond yield"
-        },
-        "3_3": {
-          "cellValue": "=BOND.GET_COUNTRY_YIELD(D3,\"10yr\",\"adjustedClose\",, 'Helper Data'!$B17)",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "3_5": {
-          "cellValue": null,
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "4_0": {
-          "cellValue": "Unlevered Beta"
-        },
-        "4_1": {
-          "cellValue": "=STOCK.GET_COMPANY_INDUSTRY_AVERAGES('DCF Valuation'!$B$3, \"unleveredBeta\", 'Helper Data'!$B17)",
-          "metadata": {
-            "comment": "Is a measure of the market risk of the company relative to it's peers in the same industry without the impact of debt. This determines how much risk comes with owning a stock.",
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "4_2": {
-          "cellValue": "Country Adjusted Default Spread"
-        },
-        "4_3": {
-          "cellValue": "=MARKET.GET_COUNTRY_EQUITY_RISK_PREMIUM(D3, \"adjustedDefaultSpread\", 'Helper Data'!$B17)",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "5_0": {
-          "cellValue": "Riskfree Rate"
-        },
-        "5_1": {
-          "cellValue": "=MARKET.RISK_FREE_RATE(D4,D5)",
-          "metadata": {
-            "comment": "Refers to the theoretical rate of return of an investment with zero risk.",
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "6_0": {
-          "cellValue": "Equity Risk Premium"
-        },
-        "6_1": {
-          "cellValue": "=MARKET.GET_COUNTRY_EQUITY_RISK_PREMIUM(D3, \"equityRiskPremium\", 'Helper Data'!$B17)",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "8_0": {
-          "cellValue": "Normal Debt",
-          "metadata": {
-            "bold": true,
-            "underline": true
-          }
-        },
-        "9_0": {
-          "cellValue": "Book Value"
-        },
-        "9_1": {
-          "cellValue": "='Helper Data'!$B$4",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "9_2": {
-          "cellValue": "Output",
-          "metadata": {
-            "bold": true,
-            "underline": true
-          }
-        },
-        "10_0": {
-          "cellValue": "Interest Expense"
-        },
-        "10_1": {
-          "cellValue": "=ABS('Helper Data'!$B$9)",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "10_2": {
-          "cellValue": "Estimated Market Value of Normal Debt"
-        },
-        "10_3": {
-          "cellValue": "=B11*(1-(1+B16)^(-B12))/B16+B10/(1+B16)^B12",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "11_0": {
-          "cellValue": "Average Maturity"
-        },
-        "11_1": {
-          "cellValue": "='DCF Valuation'!$C$9",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "11_2": {
-          "cellValue": "Estimated Value of Normal Debt in Convertible"
-        },
-        "11_3": {
-          "cellValue": "='DCF Valuation'!$G$9*(1-(1+B16)^(-'DCF Valuation'!$G$10))/B16+'DCF Valuation'!$G$8/(1+B16)^'DCF Valuation'!$G$10",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "12_0": {
-          "cellValue": "Interest Spread"
-        },
-        "12_1": {
-          "cellValue": "='Synthetic Credit Rating'!$B$5",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "12_2": {
-          "cellValue": "Estimated Value of Equity in Convertible"
-        },
-        "12_3": {
-          "cellValue": "='DCF Valuation'!$G$11-D12",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "13_0": {
-          "cellValue": "Estimated Cost of Debt"
-        },
-        "13_1": {
-          "cellValue": "=B6+B13+D5",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "13_2": {
-          "cellValue": "Levered Beta for Equity"
-        },
-        "13_3": {
-          "cellValue": "=B5*(1+(1-B17)*(E16/D16))",
-          "metadata": {
-            "comment": "Is a measure of market risk of the company relative to it's peers in the same industry including the impact of debt on the company. This determines how much risk comes with owning a stock.",
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "14_0": {
-          "cellValue": "Method of Calculating Pre-tax Cost of Debt"
-        },
-        "14_1": {
-          "cellValue": "=IF('DCF Valuation'!$C$8=\"\", \"Synthetic Credit Rating\", \"Manual Input\")"
-        },
-        "14_2": {
-          "cellValue": null,
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "14_3": {
-          "cellValue": "Equity",
-          "metadata": {
-            "bold": true
-          }
-        },
-        "14_4": {
-          "cellValue": "Debt",
-          "metadata": {
-            "bold": true
-          }
-        },
-        "14_5": {
-          "cellValue": "Preferred Stock",
-          "metadata": {
-            "bold": true
-          }
-        },
-        "14_6": {
-          "cellValue": "Capital",
-          "metadata": {
-            "bold": true
-          }
-        },
-        "15_0": {
-          "cellValue": "=\"Pre-tax Cost of Debt\"&\" (\"&B15&\")\""
-        },
-        "15_1": {
-          "cellValue": "=IF('DCF Valuation'!$C$8=\"\", B14, 'DCF Valuation'!$C$8)",
-          "metadata": {
-            "comment": "By default this is the synthetic credit rating pre-tax cost of debt that we have automatically calculated for you which is fine for most cases. If you manually input a cost of debt in the Normal Debt input field then it will overwrite this synthetic cost of debt.",
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "15_2": {
-          "cellValue": "Market Value",
-          "metadata": {
-            "bold": true
-          }
-        },
-        "15_3": {
-          "cellValue": "=B3*B4+D13",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "15_4": {
-          "cellValue": "=D11+D12",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "15_5": {
-          "cellValue": "='DCF Valuation'!$J$8*'DCF Valuation'!$J$9",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "15_6": {
-          "cellValue": "=SUM(D16:F16)",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "16_0": {
-          "cellValue": "Marginal Tax Rate"
-        },
-        "16_1": {
-          "cellValue": "=MARKET.GET_COUNTRY_EQUITY_RISK_PREMIUM(D3, \"corporateTaxRate\", 'Helper Data'!$B17)",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "16_2": {
-          "cellValue": "Weight in Cost of Capital",
-          "metadata": {
-            "bold": true
-          }
-        },
-        "16_3": {
-          "cellValue": "=D16/G16",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "16_4": {
-          "cellValue": "=E16/G16",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "16_5": {
-          "cellValue": "=F16/G16",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "16_6": {
-          "cellValue": "=SUM(D17:F17)",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "17_2": {
-          "cellValue": "Cost of Component",
-          "metadata": {
-            "bold": true
-          }
-        },
-        "17_3": {
-          "cellValue": "=B6+D14*B7",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "17_4": {
-          "cellValue": "=B16*(1-B17)",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "17_5": {
-          "cellValue": "=IF(ISERROR('DCF Valuation'!$J$10/'DCF Valuation'!$J$9), 0, 'DCF Valuation'!$J$10/'DCF Valuation'!$J$9)",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "17_6": {
-          "cellValue": "=D17*D18+E17*E18+F17*F18",
-          "metadata": {
-            "comment": "The total cost of raising capital (cash) for the company, weighted by equity and debt.",
-            "backgroundColor": "rgba(120, 73, 191, 0.4)",
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "18_0": {
-          "cellValue": null,
-          "metadata": {
-            "bold": true,
-            "underline": true
-          }
-        },
-        "25_0": {
-          "cellValue": null,
-          "metadata": {
-            "bold": true,
-            "underline": true
-          }
+        "cells": {
+            "0_0": {
+                "cellValue": "Estimated Cost of Capital",
+                "metadata": {
+                    "horizontalTextAlign": "center",
+                    "underline": true,
+                    "bold": true
+                }
+            },
+            "1_0": {
+                "cellValue": "Equity",
+                "metadata": {
+                    "bold": true,
+                    "underline": true
+                }
+            },
+            "2_0": {
+                "cellValue": "Number of Shares Outstanding"
+            },
+            "2_1": {
+                "cellValue": "='Helper Data'!$B$6",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "2_2": {
+                "cellValue": "Country ISO"
+            },
+            "2_3": {
+                "cellValue": "=STOCK.GET_COMPANY_INFO('DCF Valuation'!$B$3, \"countryISO\")"
+            },
+            "3_0": {
+                "cellValue": "Market Price per Share"
+            },
+            "3_1": {
+                "cellValue": "='Helper Data'!$B$12",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "3_2": {
+                "cellValue": "10 yr gov. bond yield"
+            },
+            "3_3": {
+                "cellValue": "=BOND.GET_COUNTRY_YIELD(D3,\"10yr\",\"adjustedClose\",, 'Helper Data'!$B17)",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "3_5": {
+                "cellValue": null,
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "4_0": {
+                "cellValue": "Unlevered Beta"
+            },
+            "4_1": {
+                "cellValue": "=STOCK.GET_COMPANY_INDUSTRY_AVERAGES('DCF Valuation'!$B$3, \"unleveredBeta\", 'Helper Data'!$B17)",
+                "metadata": {
+                    "comment": "Is a measure of the market risk of the company relative to it's peers in the same industry without the impact of debt. This determines how much risk comes with owning a stock.",
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "4_2": {
+                "cellValue": "Country Adjusted Default Spread"
+            },
+            "4_3": {
+                "cellValue": "=MARKET.GET_COUNTRY_EQUITY_RISK_PREMIUM(D3, \"adjustedDefaultSpread\", 'Helper Data'!$B17)",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "5_0": {
+                "cellValue": "Riskfree Rate"
+            },
+            "5_1": {
+                "cellValue": "=MARKET.RISK_FREE_RATE(D4,D5)",
+                "metadata": {
+                    "comment": "Refers to the theoretical rate of return of an investment with zero risk.",
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "6_0": {
+                "cellValue": "Equity Risk Premium"
+            },
+            "6_1": {
+                "cellValue": "=MARKET.GET_COUNTRY_EQUITY_RISK_PREMIUM(D3, \"equityRiskPremium\", 'Helper Data'!$B17)",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "8_0": {
+                "cellValue": "Normal Debt",
+                "metadata": {
+                    "bold": true,
+                    "underline": true
+                }
+            },
+            "9_0": {
+                "cellValue": "Book Value"
+            },
+            "9_1": {
+                "cellValue": "='Helper Data'!$B$4",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "9_2": {
+                "cellValue": "Output",
+                "metadata": {
+                    "bold": true,
+                    "underline": true
+                }
+            },
+            "10_0": {
+                "cellValue": "Interest Expense"
+            },
+            "10_1": {
+                "cellValue": "=ABS('Helper Data'!$B$9)",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "10_2": {
+                "cellValue": "Estimated Market Value of Normal Debt"
+            },
+            "10_3": {
+                "cellValue": "=B11*(1-(1+B16)^(-B12))/B16+B10/(1+B16)^B12",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "11_0": {
+                "cellValue": "Average Maturity"
+            },
+            "11_1": {
+                "cellValue": "='DCF Valuation'!$C$9",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "11_2": {
+                "cellValue": "Estimated Value of Normal Debt in Convertible"
+            },
+            "11_3": {
+                "cellValue": "='DCF Valuation'!$G$9*(1-(1+B16)^(-'DCF Valuation'!$G$10))/B16+'DCF Valuation'!$G$8/(1+B16)^'DCF Valuation'!$G$10",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "12_0": {
+                "cellValue": "Interest Spread"
+            },
+            "12_1": {
+                "cellValue": "='Synthetic Credit Rating'!$B$5",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "12_2": {
+                "cellValue": "Estimated Value of Equity in Convertible"
+            },
+            "12_3": {
+                "cellValue": "='DCF Valuation'!$G$11-D12",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "13_0": {
+                "cellValue": "Estimated Cost of Debt"
+            },
+            "13_1": {
+                "cellValue": "=B6+B13+D5",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "13_2": {
+                "cellValue": "Levered Beta for Equity"
+            },
+            "13_3": {
+                "cellValue": "=B5*(1+(1-B17)*(E16/D16))",
+                "metadata": {
+                    "comment": "Is a measure of market risk of the company relative to it's peers in the same industry including the impact of debt on the company. This determines how much risk comes with owning a stock.",
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "14_0": {
+                "cellValue": "Method of Calculating Pre-tax Cost of Debt"
+            },
+            "14_1": {
+                "cellValue": "=IF('DCF Valuation'!$C$8=\"\", \"Synthetic Credit Rating\", \"Manual Input\")"
+            },
+            "14_2": {
+                "cellValue": null,
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "14_3": {
+                "cellValue": "Equity",
+                "metadata": {
+                    "bold": true
+                }
+            },
+            "14_4": {
+                "cellValue": "Debt",
+                "metadata": {
+                    "bold": true
+                }
+            },
+            "14_5": {
+                "cellValue": "Preferred Stock",
+                "metadata": {
+                    "bold": true
+                }
+            },
+            "14_6": {
+                "cellValue": "Capital",
+                "metadata": {
+                    "bold": true
+                }
+            },
+            "15_0": {
+                "cellValue": "=\"Pre-tax Cost of Debt\"&\" (\"&B15&\")\""
+            },
+            "15_1": {
+                "cellValue": "=IF('DCF Valuation'!$C$8=\"\", B14, 'DCF Valuation'!$C$8)",
+                "metadata": {
+                    "comment": "By default this is the synthetic credit rating pre-tax cost of debt that we have automatically calculated for you which is fine for most cases. If you manually input a cost of debt in the Normal Debt input field then it will overwrite this synthetic cost of debt.",
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "15_2": {
+                "cellValue": "Market Value",
+                "metadata": {
+                    "bold": true
+                }
+            },
+            "15_3": {
+                "cellValue": "=B3*B4+D13",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "15_4": {
+                "cellValue": "=D11+D12",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "15_5": {
+                "cellValue": "='DCF Valuation'!$J$8*'DCF Valuation'!$J$9",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "15_6": {
+                "cellValue": "=SUM(D16:F16)",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "16_0": {
+                "cellValue": "Marginal Tax Rate"
+            },
+            "16_1": {
+                "cellValue": "=MARKET.GET_COUNTRY_EQUITY_RISK_PREMIUM(D3, \"corporateTaxRate\", 'Helper Data'!$B17)",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "16_2": {
+                "cellValue": "Weight in Cost of Capital",
+                "metadata": {
+                    "bold": true
+                }
+            },
+            "16_3": {
+                "cellValue": "=D16/G16",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "16_4": {
+                "cellValue": "=E16/G16",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "16_5": {
+                "cellValue": "=F16/G16",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "16_6": {
+                "cellValue": "=SUM(D17:F17)",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "17_2": {
+                "cellValue": "Cost of Component",
+                "metadata": {
+                    "bold": true
+                }
+            },
+            "17_3": {
+                "cellValue": "=B6+D14*B7",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "17_4": {
+                "cellValue": "=B16*(1-B17)",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "17_5": {
+                "cellValue": "=IF(ISERROR('DCF Valuation'!$J$10/'DCF Valuation'!$J$9), 0, 'DCF Valuation'!$J$10/'DCF Valuation'!$J$9)",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "17_6": {
+                "cellValue": "=D17*D18+E17*E18+F17*F18",
+                "metadata": {
+                    "comment": "The total cost of raising capital (cash) for the company, weighted by equity and debt.",
+                    "backgroundColor": "rgba(120, 73, 191, 0.4)",
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "18_0": {
+                "cellValue": null,
+                "metadata": {
+                    "bold": true,
+                    "underline": true
+                }
+            },
+            "25_0": {
+                "cellValue": null,
+                "metadata": {
+                    "bold": true,
+                    "underline": true
+                }
+            }
+        },
+        "sheetMetadata": {
+            "rowSizes": {},
+            "colSizes": {
+                "0": 280,
+                "1": 150,
+                "2": 281,
+                "3": 368
+            },
+            "mergedCells": {
+                "0_0": {
+                    "width": 2,
+                    "height": 1
+                }
+            }
         }
-      },
-      "sheetMetadata": {
-        "rowSizes": {},
-        "colSizes": {
-          "0": 280,
-          "1": 150,
-          "2": 281
-        },
-        "mergedCells": {
-          "0_0": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      }
     },
     "Employee Options": {
-      "cells": {
-        "0_0": {
-          "cellValue": "Black Scholes Employee Options Results",
-          "metadata": {
-            "comment": "Calculated from the inputs you entered in the Employee Options section. We use the Black Scholes methodology to work out the estimated market price per employee option. We then minus this from the 'Equity' cell in the Valuation Output (cell B39).",
-            "horizontalTextAlign": "center",
-            "underline": true,
-            "bold": true
-          }
+        "cells": {
+            "0_0": {
+                "cellValue": "Black Scholes Employee Options Results",
+                "metadata": {
+                    "comment": "Calculated from the inputs you entered in the Employee Options section. We use the Black Scholes methodology to work out the estimated market price per employee option. We then minus this from the 'Equity' cell in the Valuation Output (cell B39).",
+                    "horizontalTextAlign": "center",
+                    "underline": true,
+                    "bold": true
+                }
+            },
+            "1_0": {
+                "cellValue": "Employee Options Outstanding"
+            },
+            "1_1": {
+                "cellValue": "='DCF Valuation'!$M$8",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "2_0": {
+                "cellValue": "Average Strike Price"
+            },
+            "2_1": {
+                "cellValue": "='DCF Valuation'!$M$9",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "3_0": {
+                "cellValue": "Average Maturity"
+            },
+            "3_1": {
+                "cellValue": "='DCF Valuation'!$M$10",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "4_0": {
+                "cellValue": "Standard deviation in stock price (volatility)"
+            },
+            "4_1": {
+                "cellValue": "=STOCK.GET_COMPANY_INDUSTRY_AVERAGES('DCF Valuation'!$B$3, \"standardDeviationInStockPrices\", 'Helper Data'!$B17)",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "5_0": {
+                "cellValue": "Risk free rate"
+            },
+            "5_1": {
+                "cellValue": "='Cost of Capital'!$B$6",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "6_0": {
+                "cellValue": "Shares outstanding"
+            },
+            "6_1": {
+                "cellValue": "='Helper Data'!$B$6",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "7_0": {
+                "cellValue": "Share price"
+            },
+            "7_1": {
+                "cellValue": "='Helper Data'!$B$12",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "9_0": {
+                "cellValue": "d1"
+            },
+            "9_1": {
+                "cellValue": "=IFERROR((LN(B8 / B3) + (B6 + (B5 * B5) / 2) * B4) / (B5 * SQRT(B4)), 0)",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "10_0": {
+                "cellValue": "N (d1)"
+            },
+            "10_1": {
+                "cellValue": "=NORMDIST(B10, 0, 1, TRUE)",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "12_0": {
+                "cellValue": "d2"
+            },
+            "12_1": {
+                "cellValue": "=B10 - B5 * SQRT(B4)",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "13_0": {
+                "cellValue": "N (d2)"
+            },
+            "13_1": {
+                "cellValue": "=NORMDIST(B13, 0, 1, TRUE)",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "15_0": {
+                "cellValue": "Value per option"
+            },
+            "15_1": {
+                "cellValue": "=B8 * B11 - B3 * EXP(-B6 * B4) * B14",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "16_0": {
+                "cellValue": "Value of all options (in millions)"
+            },
+            "16_1": {
+                "cellValue": "=B16*B2",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            }
         },
-        "1_0": {
-          "cellValue": "Employee Options Outstanding"
-        },
-        "1_1": {
-          "cellValue": "='DCF Valuation'!$M$8",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "2_0": {
-          "cellValue": "Average Strike Price"
-        },
-        "2_1": {
-          "cellValue": "='DCF Valuation'!$M$9",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "3_0": {
-          "cellValue": "Average Maturity"
-        },
-        "3_1": {
-          "cellValue": "='DCF Valuation'!$M$10",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "4_0": {
-          "cellValue": "Standard deviation in stock price (volatility)"
-        },
-        "4_1": {
-          "cellValue": "=STOCK.GET_COMPANY_INDUSTRY_AVERAGES('DCF Valuation'!$B$3, \"standardDeviationInStockPrices\", 'Helper Data'!$B17)",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "5_0": {
-          "cellValue": "Risk free rate"
-        },
-        "5_1": {
-          "cellValue": "='Cost of Capital'!$B$6",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "6_0": {
-          "cellValue": "Shares outstanding"
-        },
-        "6_1": {
-          "cellValue": "='Helper Data'!$B$6",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "7_0": {
-          "cellValue": "Share price"
-        },
-        "7_1": {
-          "cellValue": "='Helper Data'!$B$12",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "9_0": {
-          "cellValue": "d1"
-        },
-        "9_1": {
-          "cellValue": "=IFERROR((LN(B8 / B3) + (B6 + (B5 * B5) / 2) * B4) / (B5 * SQRT(B4)), 0)",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "10_0": {
-          "cellValue": "N (d1)"
-        },
-        "10_1": {
-          "cellValue": "=NORMDIST(B10, 0, 1, TRUE)",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "12_0": {
-          "cellValue": "d2"
-        },
-        "12_1": {
-          "cellValue": "=B10 - B5 * SQRT(B4)",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "13_0": {
-          "cellValue": "N (d2)"
-        },
-        "13_1": {
-          "cellValue": "=NORMDIST(B13, 0, 1, TRUE)",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "15_0": {
-          "cellValue": "Value per option"
-        },
-        "15_1": {
-          "cellValue": "=B8 * B11 - B3 * EXP(-B6 * B4) * B14",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "16_0": {
-          "cellValue": "Value of all options (in millions)"
-        },
-        "16_1": {
-          "cellValue": "=B16*B2",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
+        "sheetMetadata": {
+            "rowSizes": {},
+            "colSizes": {
+                "0": 260,
+                "1": 165
+            },
+            "mergedCells": {
+                "0_0": {
+                    "width": 2,
+                    "height": 1
+                }
+            }
         }
-      },
-      "sheetMetadata": {
-        "rowSizes": {},
-        "colSizes": {
-          "0": 260,
-          "1": 165
-        },
-        "mergedCells": {
-          "0_0": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      }
     },
     "Synthetic Credit Rating": {
-      "cells": {
-        "0_0": {
-          "cellValue": "Synthetic Credit Rating",
-          "metadata": {
-            "fontSize": 16,
-            "bold": true,
-            "horizontalTextAlign": "center",
-            "underline": true
-          }
-        },
-        "1_0": {
-          "cellValue": "Company Size",
-          "metadata": {
-            "underline": false,
-            "horizontalTextAlign": "left"
-          }
-        },
-        "1_1": {
-          "cellValue": "=IF(D4>5000,\"Large\",\"Small\")",
-          "metadata": {
-            "comment": "Large companies usually have stable earnings and less chance of defaulting on their debt. Smaller companies are usually risker, therefore they have higher costs of debts.",
-            "underline": false,
-            "horizontalTextAlign": "left"
-          }
-        },
-        "1_2": {
-          "cellValue": "Operating Income",
-          "metadata": {
-            "horizontalTextAlign": "left"
-          }
-        },
-        "1_3": {
-          "cellValue": "='Helper Data'!$B$2",
-          "metadata": {
-            "horizontalTextAlign": "left",
-            "textFormatPattern": ""
-          }
-        },
-        "1_6": {
-          "cellValue": null,
-          "metadata": {
-            "bold": true
-          }
-        },
-        "2_0": {
-          "cellValue": "Interest Coverage"
-        },
-        "2_1": {
-          "cellValue": "=IF(D3=0,100,IF(D2<0,0,D2/D3))",
-          "metadata": {
-            "comment": "How many times over a company can satisfy it's interest expenses with just it's operating income. A good interest coverage is usually above 5. Companies with volatile operating income can produce misleading interest coverages as they differ each year.",
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "2_2": {
-          "cellValue": "Interest Expense"
-        },
-        "2_3": {
-          "cellValue": "=ABS('Helper Data'!$B$9)",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "3_0": {
-          "cellValue": "Estimated Bond Rating"
-        },
-        "3_1": {
-          "cellValue": "=IF(B2=\"Large\",VLOOKUP(B3,A12:F26,5),IF(B2=\"Small\", VLOOKUP(B3,C12:F26,3), 0))",
-          "metadata": {
-            "comment": "The estimated bond rating that we have worked out based on the companies interest coverage. It is similar to Moody's, S&P and Fitch's ratings. We use our own synthetic credit rating because a lot of companies do not have any rating assigned by these agencies."
-          }
-        },
-        "3_2": {
-          "cellValue": "Market Capitalization"
-        },
-        "3_3": {
-          "cellValue": "='Helper Data'!$B$11*D5",
-          "metadata": {
-            "textFormatPattern": "$#,##0.##"
-          }
-        },
-        "4_0": {
-          "cellValue": "Estimated Company Default Spread"
-        },
-        "4_1": {
-          "cellValue": "=IF(B2=\"Large\",VLOOKUP(B3,A12:F26,6),IF(B2=\"Small\", VLOOKUP(B3,C12:F26,4), 0))",
-          "metadata": {
-            "comment": "The chance of a company defaulting on it's debts within a year.",
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "4_2": {
-          "cellValue": "Financials/USD Exchange Rate"
-        },
-        "4_3": {
-          "cellValue": "=FX.GET_FIAT_EXCHANGE_RATE('Helper Data'!B14, \"USD\", \"adjustedClose\",, 'Helper Data'!B17)",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "9_0": {
-          "cellValue": "Large Companies (> $5,000m Market Cap)",
-          "metadata": {
-            "fontSize": 14,
-            "bold": true,
-            "horizontalTextAlign": "center"
-          }
-        },
-        "9_2": {
-          "cellValue": "Smaller & Riskier Companies (< $5,000m Market Cap)",
-          "metadata": {
-            "fontSize": 14,
-            "bold": true,
-            "horizontalTextAlign": "center"
-          }
-        },
-        "10_0": {
-          "cellValue": "Interest Coverage From",
-          "metadata": {
-            "horizontalTextAlign": "center",
-            "fontSize": 12,
-            "bold": true
-          }
-        },
-        "10_1": {
-          "cellValue": "Interest Coverage To",
-          "metadata": {
-            "horizontalTextAlign": "center",
-            "fontSize": 12,
-            "bold": true
-          }
-        },
-        "10_2": {
-          "cellValue": "Interest Coverage From",
-          "metadata": {
-            "horizontalTextAlign": "center",
-            "fontSize": 12,
-            "bold": true
-          }
-        },
-        "10_3": {
-          "cellValue": "Interest Coverage To",
-          "metadata": {
-            "horizontalTextAlign": "center",
-            "fontSize": 12,
-            "bold": true
-          }
-        },
-        "10_4": {
-          "cellValue": "Rating",
-          "metadata": {
-            "horizontalTextAlign": "center",
-            "fontSize": 12,
-            "bold": true
-          }
-        },
-        "10_5": {
-          "cellValue": "Spread",
-          "metadata": {
-            "horizontalTextAlign": "center",
-            "fontSize": 12,
-            "bold": true
-          }
-        },
-        "11_0": {
-          "cellValue": "0"
-        },
-        "11_1": {
-          "cellValue": "0.2",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "11_2": {
-          "cellValue": "0"
-        },
-        "11_3": {
-          "cellValue": "0.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "11_4": {
-          "cellValue": "D2/D"
-        },
-        "11_5": {
-          "cellValue": "17.44%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "12_0": {
-          "cellValue": "0.2",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "12_1": {
-          "cellValue": "0.65",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "12_2": {
-          "cellValue": "0.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "12_3": {
-          "cellValue": "0.8",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "12_4": {
-          "cellValue": "C2/C"
-        },
-        "12_5": {
-          "cellValue": "13.09%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "13_0": {
-          "cellValue": "0.65",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "13_1": {
-          "cellValue": "0.8",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "13_2": {
-          "cellValue": "0.8",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "13_3": {
-          "cellValue": "1.25",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "13_4": {
-          "cellValue": "Ca2/CC"
-        },
-        "13_5": {
-          "cellValue": "9.97%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "14_0": {
-          "cellValue": "0.8",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "14_1": {
-          "cellValue": "1.25",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "14_2": {
-          "cellValue": "1.25",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "14_3": {
-          "cellValue": "1.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "14_4": {
-          "cellValue": "Caa/CCC"
-        },
-        "14_5": {
-          "cellValue": "9.46%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "15_0": {
-          "cellValue": "1.25",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "15_1": {
-          "cellValue": "1.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "15_2": {
-          "cellValue": "1.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "15_3": {
-          "cellValue": "2",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "15_4": {
-          "cellValue": "B3/B-"
-        },
-        "15_5": {
-          "cellValue": "5.94%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "16_0": {
-          "cellValue": "1.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "16_1": {
-          "cellValue": "1.75",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "16_2": {
-          "cellValue": "2",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "16_3": {
-          "cellValue": "2.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "16_4": {
-          "cellValue": "B2/B"
-        },
-        "16_5": {
-          "cellValue": "4.86%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "17_0": {
-          "cellValue": "1.75",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "17_1": {
-          "cellValue": "2",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "17_2": {
-          "cellValue": "2.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "17_3": {
-          "cellValue": "3",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "17_4": {
-          "cellValue": "B1/B+"
-        },
-        "17_5": {
-          "cellValue": "4.05%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "18_0": {
-          "cellValue": "2",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "18_1": {
-          "cellValue": "2.25",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "18_2": {
-          "cellValue": "3",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "18_3": {
-          "cellValue": "3.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "18_4": {
-          "cellValue": "Ba2/BB"
-        },
-        "18_5": {
-          "cellValue": "2.77%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "19_0": {
-          "cellValue": "2.25",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "19_1": {
-          "cellValue": "2.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "19_2": {
-          "cellValue": "3.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "19_3": {
-          "cellValue": "4",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "19_4": {
-          "cellValue": "Ba1/BB+"
-        },
-        "19_5": {
-          "cellValue": "2.31%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "20_0": {
-          "cellValue": "2.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "20_1": {
-          "cellValue": "3",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "20_2": {
-          "cellValue": "4",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "20_3": {
-          "cellValue": "4.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "20_4": {
-          "cellValue": "Baa2/BBB"
-        },
-        "20_5": {
-          "cellValue": "1.71%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "21_0": {
-          "cellValue": "3",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "21_1": {
-          "cellValue": "4.25",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "21_2": {
-          "cellValue": "4.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "21_3": {
-          "cellValue": "6",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "21_4": {
-          "cellValue": "A3/A-"
-        },
-        "21_5": {
-          "cellValue": "1.33%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "22_0": {
-          "cellValue": "4.25",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "22_1": {
-          "cellValue": "5.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "22_2": {
-          "cellValue": "6",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "22_3": {
-          "cellValue": "7.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "22_4": {
-          "cellValue": "A2/A"
-        },
-        "22_5": {
-          "cellValue": "1.18%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "23_0": {
-          "cellValue": "5.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "23_1": {
-          "cellValue": "6.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "23_2": {
-          "cellValue": "7.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "23_3": {
-          "cellValue": "9.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "23_4": {
-          "cellValue": "A1/A+"
-        },
-        "23_5": {
-          "cellValue": "1.07%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "24_0": {
-          "cellValue": "6.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "24_1": {
-          "cellValue": "8.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "24_2": {
-          "cellValue": "9.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "24_3": {
-          "cellValue": "12.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "24_4": {
-          "cellValue": "Aa2/AA"
-        },
-        "24_5": {
-          "cellValue": "0.85%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "25_0": {
-          "cellValue": "8.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "25_1": {
-          "cellValue": "100"
-        },
-        "25_2": {
-          "cellValue": "12.5",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "25_3": {
-          "cellValue": "100"
-        },
-        "25_4": {
-          "cellValue": "Aaa/AAA"
-        },
-        "25_5": {
-          "cellValue": "0.69%\r",
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
+        "cells": {
+            "0_0": {
+                "cellValue": "Synthetic Credit Rating",
+                "metadata": {
+                    "fontSize": 16,
+                    "bold": true,
+                    "horizontalTextAlign": "center",
+                    "underline": true
+                }
+            },
+            "1_0": {
+                "cellValue": "Company Size",
+                "metadata": {
+                    "underline": false,
+                    "horizontalTextAlign": "left"
+                }
+            },
+            "1_1": {
+                "cellValue": "=IF(D4>5000,\"Large\",\"Small\")",
+                "metadata": {
+                    "comment": "Large companies usually have stable earnings and less chance of defaulting on their debt. Smaller companies are usually risker, therefore they have higher costs of debts.",
+                    "underline": false,
+                    "horizontalTextAlign": "left"
+                }
+            },
+            "1_2": {
+                "cellValue": "Operating Income",
+                "metadata": {
+                    "horizontalTextAlign": "left"
+                }
+            },
+            "1_3": {
+                "cellValue": "='Helper Data'!$B$2",
+                "metadata": {
+                    "horizontalTextAlign": "left",
+                    "textFormatPattern": ""
+                }
+            },
+            "1_6": {
+                "cellValue": null,
+                "metadata": {
+                    "bold": true
+                }
+            },
+            "2_0": {
+                "cellValue": "Interest Coverage"
+            },
+            "2_1": {
+                "cellValue": "=IF(D3=0,100,IF(D2<0,0,D2/D3))",
+                "metadata": {
+                    "comment": "How many times over a company can satisfy it's interest expenses with just it's operating income. A good interest coverage is usually above 5. Companies with volatile operating income can produce misleading interest coverages as they differ each year.",
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "2_2": {
+                "cellValue": "Interest Expense"
+            },
+            "2_3": {
+                "cellValue": "=ABS('Helper Data'!$B$9)",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "3_0": {
+                "cellValue": "Estimated Bond Rating"
+            },
+            "3_1": {
+                "cellValue": "=IF(B2=\"Large\",VLOOKUP(B3,A12:F26,5),IF(B2=\"Small\", VLOOKUP(B3,C12:F26,3), 0))",
+                "metadata": {
+                    "comment": "The estimated bond rating that we have worked out based on the companies interest coverage. It is similar to Moody's, S&P and Fitch's ratings. We use our own synthetic credit rating because a lot of companies do not have any rating assigned by these agencies."
+                }
+            },
+            "3_2": {
+                "cellValue": "Market Capitalization"
+            },
+            "3_3": {
+                "cellValue": "='Helper Data'!$B$11*D5",
+                "metadata": {
+                    "textFormatPattern": "$#,##0.##"
+                }
+            },
+            "4_0": {
+                "cellValue": "Estimated Company Default Spread"
+            },
+            "4_1": {
+                "cellValue": "=IF(B2=\"Large\",VLOOKUP(B3,A12:F26,6),IF(B2=\"Small\", VLOOKUP(B3,C12:F26,4), 0))",
+                "metadata": {
+                    "comment": "The chance of a company defaulting on it's debts within a year.",
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "4_2": {
+                "cellValue": "Financials/USD Exchange Rate"
+            },
+            "4_3": {
+                "cellValue": "=FX.GET_FIAT_EXCHANGE_RATE('Helper Data'!B14, \"USD\", \"adjustedClose\",, 'Helper Data'!B17)",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "9_0": {
+                "cellValue": "Large Companies (> $5,000m Market Cap)",
+                "metadata": {
+                    "fontSize": 14,
+                    "bold": true,
+                    "horizontalTextAlign": "center"
+                }
+            },
+            "9_2": {
+                "cellValue": "Smaller & Riskier Companies (< $5,000m Market Cap)",
+                "metadata": {
+                    "fontSize": 14,
+                    "bold": true,
+                    "horizontalTextAlign": "center"
+                }
+            },
+            "10_0": {
+                "cellValue": "Interest Coverage From",
+                "metadata": {
+                    "horizontalTextAlign": "center",
+                    "fontSize": 12,
+                    "bold": true
+                }
+            },
+            "10_1": {
+                "cellValue": "Interest Coverage To",
+                "metadata": {
+                    "horizontalTextAlign": "center",
+                    "fontSize": 12,
+                    "bold": true
+                }
+            },
+            "10_2": {
+                "cellValue": "Interest Coverage From",
+                "metadata": {
+                    "horizontalTextAlign": "center",
+                    "fontSize": 12,
+                    "bold": true
+                }
+            },
+            "10_3": {
+                "cellValue": "Interest Coverage To",
+                "metadata": {
+                    "horizontalTextAlign": "center",
+                    "fontSize": 12,
+                    "bold": true
+                }
+            },
+            "10_4": {
+                "cellValue": "Rating",
+                "metadata": {
+                    "horizontalTextAlign": "center",
+                    "fontSize": 12,
+                    "bold": true
+                }
+            },
+            "10_5": {
+                "cellValue": "Spread",
+                "metadata": {
+                    "horizontalTextAlign": "center",
+                    "fontSize": 12,
+                    "bold": true
+                }
+            },
+            "11_0": {
+                "cellValue": "0"
+            },
+            "11_1": {
+                "cellValue": "0.2",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "11_2": {
+                "cellValue": "0"
+            },
+            "11_3": {
+                "cellValue": "0.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "11_4": {
+                "cellValue": "D2/D"
+            },
+            "11_5": {
+                "cellValue": "17.44%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "12_0": {
+                "cellValue": "0.2",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "12_1": {
+                "cellValue": "0.65",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "12_2": {
+                "cellValue": "0.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "12_3": {
+                "cellValue": "0.8",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "12_4": {
+                "cellValue": "C2/C"
+            },
+            "12_5": {
+                "cellValue": "13.09%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "13_0": {
+                "cellValue": "0.65",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "13_1": {
+                "cellValue": "0.8",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "13_2": {
+                "cellValue": "0.8",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "13_3": {
+                "cellValue": "1.25",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "13_4": {
+                "cellValue": "Ca2/CC"
+            },
+            "13_5": {
+                "cellValue": "9.97%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "14_0": {
+                "cellValue": "0.8",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "14_1": {
+                "cellValue": "1.25",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "14_2": {
+                "cellValue": "1.25",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "14_3": {
+                "cellValue": "1.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "14_4": {
+                "cellValue": "Caa/CCC"
+            },
+            "14_5": {
+                "cellValue": "9.46%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "15_0": {
+                "cellValue": "1.25",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "15_1": {
+                "cellValue": "1.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "15_2": {
+                "cellValue": "1.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "15_3": {
+                "cellValue": "2",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "15_4": {
+                "cellValue": "B3/B-"
+            },
+            "15_5": {
+                "cellValue": "5.94%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "16_0": {
+                "cellValue": "1.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "16_1": {
+                "cellValue": "1.75",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "16_2": {
+                "cellValue": "2",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "16_3": {
+                "cellValue": "2.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "16_4": {
+                "cellValue": "B2/B"
+            },
+            "16_5": {
+                "cellValue": "4.86%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "17_0": {
+                "cellValue": "1.75",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "17_1": {
+                "cellValue": "2",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "17_2": {
+                "cellValue": "2.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "17_3": {
+                "cellValue": "3",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "17_4": {
+                "cellValue": "B1/B+"
+            },
+            "17_5": {
+                "cellValue": "4.05%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "18_0": {
+                "cellValue": "2",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "18_1": {
+                "cellValue": "2.25",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "18_2": {
+                "cellValue": "3",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "18_3": {
+                "cellValue": "3.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "18_4": {
+                "cellValue": "Ba2/BB"
+            },
+            "18_5": {
+                "cellValue": "2.77%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "19_0": {
+                "cellValue": "2.25",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "19_1": {
+                "cellValue": "2.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "19_2": {
+                "cellValue": "3.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "19_3": {
+                "cellValue": "4",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "19_4": {
+                "cellValue": "Ba1/BB+"
+            },
+            "19_5": {
+                "cellValue": "2.31%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "20_0": {
+                "cellValue": "2.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "20_1": {
+                "cellValue": "3",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "20_2": {
+                "cellValue": "4",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "20_3": {
+                "cellValue": "4.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "20_4": {
+                "cellValue": "Baa2/BBB"
+            },
+            "20_5": {
+                "cellValue": "1.71%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "21_0": {
+                "cellValue": "3",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "21_1": {
+                "cellValue": "4.25",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "21_2": {
+                "cellValue": "4.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "21_3": {
+                "cellValue": "6",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "21_4": {
+                "cellValue": "A3/A-"
+            },
+            "21_5": {
+                "cellValue": "1.33%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "22_0": {
+                "cellValue": "4.25",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "22_1": {
+                "cellValue": "5.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "22_2": {
+                "cellValue": "6",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "22_3": {
+                "cellValue": "7.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "22_4": {
+                "cellValue": "A2/A"
+            },
+            "22_5": {
+                "cellValue": "1.18%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "23_0": {
+                "cellValue": "5.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "23_1": {
+                "cellValue": "6.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "23_2": {
+                "cellValue": "7.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "23_3": {
+                "cellValue": "9.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "23_4": {
+                "cellValue": "A1/A+"
+            },
+            "23_5": {
+                "cellValue": "1.07%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "24_0": {
+                "cellValue": "6.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "24_1": {
+                "cellValue": "8.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "24_2": {
+                "cellValue": "9.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "24_3": {
+                "cellValue": "12.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "24_4": {
+                "cellValue": "Aa2/AA"
+            },
+            "24_5": {
+                "cellValue": "0.85%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "25_0": {
+                "cellValue": "8.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "25_1": {
+                "cellValue": "100"
+            },
+            "25_2": {
+                "cellValue": "12.5",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "25_3": {
+                "cellValue": "100"
+            },
+            "25_4": {
+                "cellValue": "Aaa/AAA"
+            },
+            "25_5": {
+                "cellValue": "0.69%\r",
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            }
+        },
+        "sheetMetadata": {
+            "rowSizes": {},
+            "colSizes": {
+                "0": 283,
+                "1": 273,
+                "2": 252,
+                "3": 238
+            },
+            "mergedCells": {
+                "0_0": {
+                    "width": 2,
+                    "height": 1
+                },
+                "9_0": {
+                    "width": 2,
+                    "height": 1
+                },
+                "9_2": {
+                    "width": 2,
+                    "height": 1
+                }
+            }
         }
-      },
-      "sheetMetadata": {
-        "rowSizes": {},
-        "colSizes": {
-          "0": 283,
-          "1": 273,
-          "2": 252,
-          "3": 238
-        },
-        "mergedCells": {
-          "0_0": {
-            "width": 2,
-            "height": 1
-          },
-          "9_0": {
-            "width": 2,
-            "height": 1
-          },
-          "9_2": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      }
     },
     "Industry Averages (US)": {
-      "cells": {
-        "0_0": {
-          "cellValue": "=STOCK.GET_INDUSTRY_AVERAGES(\"US\",, 'Helper Data'!$B17)"
-        }
-      },
-      "sheetMetadata": {
-        "rowSizes": {},
-        "colSizes": {
-          "0": 263
+        "cells": {
+            "0_0": {
+                "cellValue": "=STOCK.GET_INDUSTRY_AVERAGES(\"US\",, 'Helper Data'!$B17)"
+            }
         },
-        "mergedCells": {},
-        "frozenRow": 0,
-        "frozenCol": 0
-      }
+        "sheetMetadata": {
+            "rowSizes": {},
+            "colSizes": {
+                "0": 263
+            },
+            "mergedCells": {},
+            "frozenRow": 0,
+            "frozenCol": 0
+        }
     },
     "Industry Averages (Global)": {
-      "cells": {
-        "0_0": {
-          "cellValue": "=STOCK.GET_INDUSTRY_AVERAGES(\"Global\",, 'Helper Data'!$B17)"
-        }
-      },
-      "sheetMetadata": {
-        "rowSizes": {},
-        "colSizes": {
-          "0": 263
+        "cells": {
+            "0_0": {
+                "cellValue": "=STOCK.GET_INDUSTRY_AVERAGES(\"Global\",, 'Helper Data'!$B17)"
+            }
         },
-        "mergedCells": {},
-        "frozenRow": 0,
-        "frozenCol": 0
-      }
+        "sheetMetadata": {
+            "rowSizes": {},
+            "colSizes": {
+                "0": 263
+            },
+            "mergedCells": {},
+            "frozenRow": 0,
+            "frozenCol": 0
+        }
     },
     "Helper Data": {
-      "cells": {
-        "0_0": {
-          "cellValue": "Revenue"
+        "cells": {
+            "0_0": {
+                "cellValue": "Revenue"
+            },
+            "0_1": {
+                "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"revenue\",, B17)/E1",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "0_3": {
+                "cellValue": "Million Modifier"
+            },
+            "0_4": {
+                "cellValue": "1000000",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "1_0": {
+                "cellValue": "Operating Income"
+            },
+            "1_1": {
+                "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"operatingIncome\",, B17)/E1",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "2_0": {
+                "cellValue": "Book Value of Equity"
+            },
+            "2_1": {
+                "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"totalEquity\",, B17)/E1",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "3_0": {
+                "cellValue": "Book Value of Debt"
+            },
+            "3_1": {
+                "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"totalDebt\",, B17)/E1",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "4_0": {
+                "cellValue": "Invested Capital"
+            },
+            "4_1": {
+                "cellValue": "=(B3+B4)-B8",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "4_4": {
+                "cellValue": null,
+                "metadata": {
+                    "textFormatPattern": "0.00%"
+                }
+            },
+            "5_0": {
+                "cellValue": "Shares Outstanding"
+            },
+            "5_1": {
+                "cellValue": "=STOCK.GET_COMPANY_OUTSTANDING_SHARES('DCF Valuation'!$B$3,\"shares\")/E1",
+                "metadata": {
+                    "textFormatPattern": "#,##0.##"
+                }
+            },
+            "5_4": {
+                "cellValue": null,
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "6_0": {
+                "cellValue": "Minority Interest"
+            },
+            "6_1": {
+                "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"noncontrollingInterestInConsolidatedEntity\",, B17)/E1",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "7_0": {
+                "cellValue": "Cash & Short Term Investments"
+            },
+            "7_1": {
+                "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"cashAndShortTermInvestments\",, B17)/E1",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "8_0": {
+                "cellValue": "Interest Expense"
+            },
+            "8_1": {
+                "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3,\"interestExpense\",, B17)/E1",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "9_0": {
+                "cellValue": "Capital Lease Obligations"
+            },
+            "9_1": {
+                "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3,\"capitalLeaseObligations\",, B17)/E1",
+                "metadata": {
+                    "textFormatPattern": ""
+                }
+            },
+            "10_0": {
+                "cellValue": "Converted Market Capitalization"
+            },
+            "10_1": {
+                "cellValue": "=(STOCK.GET_COMPANY_PRICES('DCF Valuation'!$B$3,\"adjustedClose\",, B17)*B6)*B15",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "11_0": {
+                "cellValue": "Converted Share Price"
+            },
+            "11_1": {
+                "cellValue": "=STOCK.GET_COMPANY_PRICES('DCF Valuation'!$B$3, \"adjustedClose\",, B17)*B15",
+                "metadata": {
+                    "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
+                }
+            },
+            "12_0": {
+                "cellValue": "Market Listed Currency Code"
+            },
+            "12_1": {
+                "cellValue": "=STOCK.GET_COMPANY_INFO('DCF Valuation'!$B$3, \"currencyCode\")"
+            },
+            "12_2": {
+                "cellValue": "Market Listed Currency Symbol"
+            },
+            "12_3": {
+                "cellValue": "=CONVERT_CURRENCY_CODE_TO_SYMBOL(B13)"
+            },
+            "13_0": {
+                "cellValue": "Financials Currency Code"
+            },
+            "13_1": {
+                "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"currencyCode\",, B17)"
+            },
+            "13_2": {
+                "cellValue": "Financials Currency Symbol"
+            },
+            "13_3": {
+                "cellValue": "=CONVERT_CURRENCY_CODE_TO_SYMBOL(B14)"
+            },
+            "14_0": {
+                "cellValue": "Financials Quote Exchange Rate"
+            },
+            "14_1": {
+                "cellValue": "=FX.GET_FIAT_EXCHANGE_RATE(B13, B14, \"adjustedClose\",, B17)"
+            },
+            "15_0": {
+                "cellValue": "Market Quote Exchange Rate"
+            },
+            "15_1": {
+                "cellValue": "=FX.GET_FIAT_EXCHANGE_RATE(B14, B13, \"adjustedClose\",, B17)"
+            },
+            "16_0": {
+                "cellValue": "Creation Date"
+            },
+            "16_1": {
+                "cellValue": "=TEXT(SPREADSHEET_CREATION_DATE(), \"YYYY-MM-DD\")"
+            }
         },
-        "0_1": {
-          "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"revenue\",, B17)/E1",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "0_3": {
-          "cellValue": "Million Modifier"
-        },
-        "0_4": {
-          "cellValue": "1000000",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "1_0": {
-          "cellValue": "Operating Income"
-        },
-        "1_1": {
-          "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"operatingIncome\",, B17)/E1",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "2_0": {
-          "cellValue": "Book Value of Equity"
-        },
-        "2_1": {
-          "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"totalEquity\",, B17)/E1",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "3_0": {
-          "cellValue": "Book Value of Debt"
-        },
-        "3_1": {
-          "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"totalDebt\",, B17)/E1",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "4_0": {
-          "cellValue": "Invested Capital"
-        },
-        "4_1": {
-          "cellValue": "=(B3+B4)-B8",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "4_4": {
-          "cellValue": null,
-          "metadata": {
-            "textFormatPattern": "0.00%"
-          }
-        },
-        "5_0": {
-          "cellValue": "Shares Outstanding"
-        },
-        "5_1": {
-          "cellValue": "=STOCK.GET_COMPANY_OUTSTANDING_SHARES('DCF Valuation'!$B$3,\"shares\")/E1",
-          "metadata": {
-            "textFormatPattern": "#,##0.##"
-          }
-        },
-        "5_4": {
-          "cellValue": null,
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "6_0": {
-          "cellValue": "Minority Interest"
-        },
-        "6_1": {
-          "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"noncontrollingInterestInConsolidatedEntity\",, B17)/E1",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "7_0": {
-          "cellValue": "Cash & Short Term Investments"
-        },
-        "7_1": {
-          "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"cashAndShortTermInvestments\",, B17)/E1",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "8_0": {
-          "cellValue": "Interest Expense"
-        },
-        "8_1": {
-          "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3,\"interestExpense\",, B17)/E1",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "9_0": {
-          "cellValue": "Capital Lease Obligations"
-        },
-        "9_1": {
-          "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3,\"capitalLeaseObligations\",, B17)/E1",
-          "metadata": {
-            "textFormatPattern": ""
-          }
-        },
-        "10_0": {
-          "cellValue": "Converted Market Capitalization"
-        },
-        "10_1": {
-          "cellValue": "=(STOCK.GET_COMPANY_PRICES('DCF Valuation'!$B$3,\"adjustedClose\",, B17)*B6)*B15",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "11_0": {
-          "cellValue": "Converted Share Price"
-        },
-        "11_1": {
-          "cellValue": "=STOCK.GET_COMPANY_PRICES('DCF Valuation'!$B$3, \"adjustedClose\",, B17)*B15",
-          "metadata": {
-            "textFormatPattern": "=\"['Helper Data'!D14]\"#,##0.##"
-          }
-        },
-        "12_0": {
-          "cellValue": "Market Listed Currency Code"
-        },
-        "12_1": {
-          "cellValue": "=STOCK.GET_COMPANY_INFO('DCF Valuation'!$B$3, \"currencyCode\")"
-        },
-        "12_2": {
-          "cellValue": "Market Listed Currency Symbol"
-        },
-        "12_3": {
-          "cellValue": "=CONVERT_CURRENCY_CODE_TO_SYMBOL(B13)"
-        },
-        "13_0": {
-          "cellValue": "Financials Currency Code"
-        },
-        "13_1": {
-          "cellValue": "=STOCK.GET_COMPANY_FINANCIALS('DCF Valuation'!$B$3, \"currencyCode\",, B17)"
-        },
-        "13_2": {
-          "cellValue": "Financials Currency Symbol"
-        },
-        "13_3": {
-          "cellValue": "=CONVERT_CURRENCY_CODE_TO_SYMBOL(B14)"
-        },
-        "14_0": {
-          "cellValue": "Financials Quote Exchange Rate"
-        },
-        "14_1": {
-          "cellValue": "=FX.GET_FIAT_EXCHANGE_RATE(B13, B14, \"adjustedClose\",, B17)"
-        },
-        "15_0": {
-          "cellValue": "Market Quote Exchange Rate"
-        },
-        "15_1": {
-          "cellValue": "=FX.GET_FIAT_EXCHANGE_RATE(B14, B13, \"adjustedClose\",, B17)"
-        },
-        "16_0": {
-          "cellValue": "Creation Date"
-        },
-        "16_1": {
-          "cellValue": "=TEXT(SPREADSHEET_CREATION_DATE(), \"YYYY-MM-DD\")"
+        "sheetMetadata": {
+            "rowSizes": {},
+            "colSizes": {
+                "0": 198,
+                "1": 167,
+                "2": 179,
+                "3": 104
+            },
+            "mergedCells": {}
         }
-      },
-      "sheetMetadata": {
-        "rowSizes": {},
-        "colSizes": {
-          "0": 198,
-          "1": 167,
-          "2": 179,
-          "3": 104
-        },
-        "mergedCells": {}
-      }
     }
   }
 }

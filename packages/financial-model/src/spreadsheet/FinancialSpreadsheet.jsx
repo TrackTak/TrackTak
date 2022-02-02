@@ -19,6 +19,8 @@ import * as bondPlugin from './plugins/bond/plugin'
 import * as fxPlugin from './plugins/fx/plugin'
 import * as marketPlugin from './plugins/market/plugin'
 import * as helperPlugin from './plugins/helpers/plugin'
+import * as autocompletePlugin from './plugins/autocomplete/plugin'
+import * as dataAnalysisPlugin from './plugins/dataAnalysis/plugin'
 
 const buildPowersheet = sheets => {
   const sheetsMetadata = {}
@@ -82,6 +84,12 @@ const FinancialSpreadsheet = ({ spreadsheetData, saveSheetData, sx }) => {
       )
     }
 
+    const getAutocompleteInput = () => {
+      return spreadsheet.sheets.cellEditor.currentCellText
+    }
+
+    const getPowersheet = () => spreadsheet
+
     const plugins = [
       {
         instance: stockPlugin.getPlugin(getApiFrozenTimestamp),
@@ -104,8 +112,19 @@ const FinancialSpreadsheet = ({ spreadsheetData, saveSheetData, sx }) => {
           new Date(spreadsheetData.createdTimestamp)
         ),
         translations: helperPlugin.translations
+      },
+      {
+        instance: autocompletePlugin.getPlugin(getAutocompleteInput),
+        translations: autocompletePlugin.translations
       }
     ]
+
+    if (process.env.ENABLE_DATA_ANALYSIS === 'true') {
+      plugins.push({
+        instance: dataAnalysisPlugin.getPlugin(getPowersheet),
+        translations: dataAnalysisPlugin.translations
+      })
+    }
 
     plugins.forEach(({ instance, translations }) => {
       HyperFormula.registerFunctionPlugin(instance, translations)
