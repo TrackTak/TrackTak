@@ -16,10 +16,11 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 const ShareModelDialog = ({
   openShareModelDialog,
   handleOnClickCloseShareModelDialog,
-  selectedSpreadsheet
+  selectedSpreadsheet,
+  checked,
+  setChecked
 }) => {
   const [copiedText, setCopiedText] = useState()
-  const [checked, setChecked] = useState(false)
 
   const handleOnChangeSwitch = e => {
     setChecked(e.target.checked)

@@ -68,10 +68,22 @@ const buildPowersheet = sheets => {
   return spreadsheet
 }
 
-const FinancialSpreadsheet = ({ spreadsheetData, saveSheetData, sx }) => {
+const FinancialSpreadsheet = ({
+  isReadOnly,
+  spreadsheetData,
+  saveSheetData,
+  sx
+}) => {
   const [spreadsheet, setSpreadsheet] = useState()
   const [containerEl, setContainerEl] = useState()
   const name = spreadsheetData?.sheetData.name
+
+  if (isReadOnly) {
+    const toolbarEl = spreadsheet.toolbar.toolbarEl
+    const toolbarHidden = document.createElement('div')
+    toolbarHidden.classList.add('toolbar-hidden')
+    toolbarHidden.appendChild(toolbarEl)
+  }
 
   useEffect(() => {
     const getApiFrozenTimestamp = () => {

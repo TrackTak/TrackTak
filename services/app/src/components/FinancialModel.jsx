@@ -6,7 +6,7 @@ import { utils } from '@tracktak/common'
 import useSaveSpreadsheetData from '../hooks/useSaveSpreadsheetData'
 import { useParams } from 'react-router-dom'
 
-const FinancialModel = () => {
+const FinancialModel = ({ isReadOnly }) => {
   const params = useParams()
   const spreadsheetData = useFetchSpreadsheet(params.sheetId)
   const saveSheetData = useSaveSpreadsheetData(spreadsheetData)

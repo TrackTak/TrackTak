@@ -18,7 +18,8 @@ import {
   ListItemIcon,
   FormControl,
   Input,
-  Tooltip
+  Tooltip,
+  Chip
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove'
@@ -50,6 +51,7 @@ const SavedSpreadsheets = () => {
   const [name, setName] = useState()
   const [openModalFolder, setOpenModalFolder] = useState(false)
   const [openShareModelDialog, setOpenShareModelDialog] = useState(false)
+  const [checked, setChecked] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const inputRef = useRef()
   const [currentEditableSpreadsheetId, setCurrentEditableSpreadsheetId] =
@@ -285,7 +287,9 @@ const SavedSpreadsheets = () => {
                           <Box
                             sx={{
                               display: 'flex',
-                              alignItems: 'center'
+                              flexWrap: 'nowrap',
+                              alignItems: 'center',
+                              flexDirection: 'row'
                             }}
                           >
                             <ListItemIcon>
@@ -304,10 +308,24 @@ const SavedSpreadsheets = () => {
                                 />
                               </FormControl>
                             ) : (
-                              <Box sx={{ overflow: 'hidden' }}>
+                              <Box
+                                sx={{
+                                  overflow: 'hidden',
+                                  mr: '5px'
+                                }}
+                              >
                                 {spreadsheet.sheetData.name}
                               </Box>
                             )}
+                            {checked ? (
+                              <Chip
+                                label='Shared'
+                                size='small'
+                                sx={{
+                                  height: '20px'
+                                }}
+                              />
+                            ) : null}
                           </Box>
                         </TableCell>
                         <TableCell align='right'>
@@ -427,6 +445,8 @@ const SavedSpreadsheets = () => {
             </Box>
           </Modal>
           <ShareModelDialog
+            checked={checked}
+            setChecked={setChecked}
             selectedSpreadsheet={selectedSpreadsheet}
             openShareModelDialog={openShareModelDialog}
             handleOnClickCloseShareModelDialog={
