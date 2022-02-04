@@ -42,7 +42,7 @@ const Index = () => {
               path='/shared/spreadsheets/:sheetId'
               element={
                 <LayoutFullScreen>
-                  <FinancialModel />
+                  <FinancialModel isReadOnly />
                 </LayoutFullScreen>
               }
             />

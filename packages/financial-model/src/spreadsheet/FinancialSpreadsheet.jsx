@@ -7,6 +7,7 @@ import registerSharedFunctions from './registerSharedFunctions'
 import * as autocompletePlugin from './plugins/autocomplete/plugin'
 import * as dataAnalysisPlugin from './plugins/dataAnalysis/plugin'
 import getNewFeatureTooltip from './getNewFeatureTooltip'
+import classNames from 'classnames/bind'
 
 const FinancialSpreadsheet = ({
   isReadOnly,
@@ -17,13 +18,6 @@ const FinancialSpreadsheet = ({
   const [spreadsheet, setSpreadsheet] = useState()
   const [containerEl, setContainerEl] = useState()
   const name = spreadsheetData?.sheetData.name
-
-  if (isReadOnly) {
-    const toolbarEl = spreadsheet.toolbar.toolbarEl
-    const toolbarHidden = document.createElement('div')
-    toolbarHidden.classList.add('toolbar-hidden')
-    toolbarHidden.appendChild(toolbarEl)
-  }
 
   useEffect(() => {
     const dataGetter = () => {
@@ -179,7 +173,13 @@ const FinancialSpreadsheet = ({
     spreadsheet?.setOptions(options)
   }, [name, spreadsheet])
 
-  return <Box sx={sx} ref={setContainerEl} />
+  return (
+    <Box
+      sx={sx}
+      ref={setContainerEl}
+      className={classNames('financial-spreadsheet', isReadOnly && 'readonly')}
+    />
+  )
 }
 
 export default FinancialSpreadsheet

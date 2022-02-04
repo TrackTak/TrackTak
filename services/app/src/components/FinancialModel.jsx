@@ -22,6 +22,7 @@ const FinancialModel = ({ isReadOnly }) => {
       )}
       {spreadsheetData?.sheetData.data.sheets && (
         <FinancialSpreadsheet
+          isReadOnly={isReadOnly}
           saveSheetData={saveSheetData}
           spreadsheetData={spreadsheetData}
           sx={{
