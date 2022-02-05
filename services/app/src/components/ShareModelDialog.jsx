@@ -12,6 +12,7 @@ import {
 import React, { useState } from 'react'
 import LinkRoundedIcon from '@mui/icons-material/LinkRounded'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import { api, useAuth } from '@tracktak/common'
 
 const ShareModelDialog = ({
   openShareModelDialog,
@@ -21,9 +22,28 @@ const ShareModelDialog = ({
   setChecked
 }) => {
   const [copiedText, setCopiedText] = useState()
+  const { getAccessToken } = useAuth()
 
-  const handleOnChangeSwitch = e => {
+  const updateSharedSpreadsheet = async spreadsheet => {
+    const token = await getAccessToken()
+    const accessToken = token?.jwtToken
+    const response = await api.getSpreadsheet(spreadsheet._id, token?.jwtToken)
+
+    await api.saveSpreadsheet(
+      {
+        ...response.data.spreadsheet,
+        globalPublicEntitlements: {
+          isPublic: true,
+          entitlements: 'read'
+        }
+      },
+      accessToken
+    )
+  }
+
+  const handleOnChangeSwitch = spreadsheet => async e => {
     setChecked(e.target.checked)
+    await updateSharedSpreadsheet(spreadsheet)
   }
 
   const handleOnClickCopy = async () => {
@@ -82,7 +102,7 @@ const ShareModelDialog = ({
             <Switch
               checked={checked}
               sx={{ display: 'flex', alignItems: 'center' }}
-              onClick={handleOnChangeSwitch}
+              onClick={handleOnChangeSwitch(selectedSpreadsheet)}
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </Grid>

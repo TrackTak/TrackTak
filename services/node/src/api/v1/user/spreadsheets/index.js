@@ -20,6 +20,7 @@ router.post('/', async (req, res) => {
   res.send({ spreadsheet })
 })
 
+// TODO: This route should be /:id and we should remove the put method underneath
 router.put('/', async (req, res) => {
   const spreadsheet = await updateSpreadsheet(req.body)
 

@@ -1,12 +1,16 @@
 import express from 'express'
-import { getSpreadsheet } from '../../user/spreadsheets/spreadsheetApi'
+import { getGlobalSharedSpreadsheet } from '../../user/spreadsheets/spreadsheetApi'
 
 const router = express.Router()
 
 router.get('/:id', async (req, res) => {
-  const spreadsheet = await getSpreadsheet(req.params.id)
+  const spreadsheet = await getGlobalSharedSpreadsheet(req.params.id)
 
-  res.send({ spreadsheet })
+  if (spreadsheet.globalPublicEntitlements?.isPublic) {
+    res.send({ spreadsheet })
+  }
+
+  res.send(null)
 })
 
 export default router
