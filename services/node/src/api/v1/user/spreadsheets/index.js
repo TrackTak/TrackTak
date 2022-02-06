@@ -15,7 +15,11 @@ router.post('/', async (req, res) => {
     req.user.username
   )
 
-  await updateSpreadsheetFolder(spreadsheet._id, req.body.folderId)
+  await updateSpreadsheetFolder(
+    spreadsheet._id,
+    req.user.username,
+    req.body.folderId
+  )
 
   res.send({ spreadsheet })
 })
@@ -30,6 +34,7 @@ router.put('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const spreadsheet = await updateSpreadsheetFolder(
     req.params.id,
+    req.user.username,
     req.body.folderId
   )
 
@@ -37,13 +42,13 @@ router.put('/:id', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
-  const spreadsheet = await getSpreadsheet(req.params.id)
+  const spreadsheet = await getSpreadsheet(req.params.id, req.user.username)
 
   res.send({ spreadsheet })
 })
 
 router.delete('/:id', async (req, res) => {
-  await deleteSpreadsheet(req.params.id)
+  await deleteSpreadsheet(req.params.id, req.user.username)
 
   res.send({ id: req.params.id })
 })

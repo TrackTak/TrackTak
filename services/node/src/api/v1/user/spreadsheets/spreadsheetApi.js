@@ -44,21 +44,24 @@ export const getSpreadsheetsMetadata = async userId => {
   )
 }
 
-export const getGlobalSharedSpreadsheet = async id => {
+export const getGlobalSharedSpreadsheet = async (id, userId) => {
   return database.findOne(Collections.POWERSHEET_SPREADSHEET, {
-    _id: new MongoDb.ObjectId(id)
+    _id: new MongoDb.ObjectId(id),
+    userId
   })
 }
 
-export const getSpreadsheet = async id => {
+export const getSpreadsheet = async (id, userId) => {
   return database.findOne(Collections.POWERSHEET_SPREADSHEET, {
-    _id: new MongoDb.ObjectId(id)
+    _id: new MongoDb.ObjectId(id),
+    userId
   })
 }
 
-export const deleteSpreadsheet = async id => {
+export const deleteSpreadsheet = async (id, userId) => {
   return database.deleteOne(Collections.POWERSHEET_SPREADSHEET, {
-    _id: new MongoDb.ObjectId(id)
+    _id: new MongoDb.ObjectId(id),
+    userId
   })
 }
 
@@ -76,11 +79,12 @@ export const getSpreadsheetsInFolder = async folderId => {
   )
 }
 
-export const updateSpreadsheetFolder = async (id, folderId) => {
+export const updateSpreadsheetFolder = async (id, userId, folderId) => {
   return database.updateOne(
     Collections.POWERSHEET_SPREADSHEET,
     {
-      _id: new MongoDb.ObjectId(id)
+      _id: new MongoDb.ObjectId(id),
+      userId
     },
     {
       $set: { folderId }
