@@ -46,20 +46,36 @@ const SavedSpreadsheets = () => {
   const { folderId, folders } = useSpreadsheetsMetadata()
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false)
   const { userData, getAccessToken } = useAuth()
-  const [selectedSpreadsheet, setSelectedSpreadsheet] = useState()
+  const [selectedSpreadsheetId, setSelectedSpreadsheetId] = useState()
   const [spreadsheets, setSpreadsheets] = useState([])
   const [name, setName] = useState()
   const [openModalFolder, setOpenModalFolder] = useState(false)
   const [openShareModelDialog, setOpenShareModelDialog] = useState(false)
-  const [checked, setChecked] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const inputRef = useRef()
   const [currentEditableSpreadsheetId, setCurrentEditableSpreadsheetId] =
     useState(null)
   const open = Boolean(anchorEl)
   const moveToDisabled = folders.length === 1
+  const selectedSpreadsheet = spreadsheets.find(
+    x => x._id === selectedSpreadsheetId
+  )
   const isSelectedInEditMode =
     currentEditableSpreadsheetId === selectedSpreadsheet?._id
+
+  const fetchNewSpreadsheet = async spreadsheetId => {
+    const token = await getAccessToken()
+    const accessToken = token?.jwtToken
+    const response = await api.getSpreadsheet(spreadsheetId, accessToken)
+
+    const newSpreadsheets = [...spreadsheets]
+
+    const index = newSpreadsheets.findIndex(x => x._id === spreadsheetId)
+
+    newSpreadsheets[index] = response.data.spreadsheet
+
+    setSpreadsheets(newSpreadsheets)
+  }
 
   const fetchNewSpreadsheets = useCallback(async () => {
     const token = await getAccessToken()
@@ -85,7 +101,7 @@ const SavedSpreadsheets = () => {
       },
       accessToken
     )
-    await fetchNewSpreadsheets()
+    await fetchNewSpreadsheet()
 
     setCurrentEditableSpreadsheetId(null)
     setName(null)
@@ -127,7 +143,7 @@ const SavedSpreadsheets = () => {
   const handleOnClickAnchor = spreadsheet => e => {
     e.stopPropagation()
 
-    setSelectedSpreadsheet(spreadsheet)
+    setSelectedSpreadsheetId(spreadsheet._id)
     setAnchorEl(e.currentTarget)
   }
 
@@ -147,7 +163,7 @@ const SavedSpreadsheets = () => {
   const handleOnClickOpenShareModelDialog = spreadsheet => e => {
     e.stopPropagation()
 
-    setSelectedSpreadsheet(spreadsheet)
+    setSelectedSpreadsheetId(spreadsheet._id)
     setOpenShareModelDialog(true)
     setAnchorEl(null)
   }
@@ -179,7 +195,7 @@ const SavedSpreadsheets = () => {
       const token = await getAccessToken()
 
       await api.deleteSpreadsheet(selectedSpreadsheet._id, token?.jwtToken)
-      await fetchNewSpreadsheets()
+      await fetchNewSpreadsheet()
 
       setAnchorEl(null)
     }
@@ -317,7 +333,7 @@ const SavedSpreadsheets = () => {
                                 {spreadsheet.sheetData.name}
                               </Box>
                             )}
-                            {checked ? (
+                            {spreadsheet.globalPublicEntitlements?.isPublic ? (
                               <Chip
                                 label='Shared'
                                 size='small'
@@ -444,15 +460,17 @@ const SavedSpreadsheets = () => {
               </Box>
             </Box>
           </Modal>
-          <ShareModelDialog
-            checked={checked}
-            setChecked={setChecked}
-            selectedSpreadsheet={selectedSpreadsheet}
-            openShareModelDialog={openShareModelDialog}
-            handleOnClickCloseShareModelDialog={
-              handleOnClickCloseShareModelDialog
-            }
-          />
+          {selectedSpreadsheet && (
+            <ShareModelDialog
+              fetchNewSpreadsheet={fetchNewSpreadsheet}
+              // fetchNewSpreadsheets={fetchNewSpreadsheets}
+              selectedSpreadsheet={selectedSpreadsheet}
+              openShareModelDialog={openShareModelDialog}
+              handleOnClickCloseShareModelDialog={
+                handleOnClickCloseShareModelDialog
+              }
+            />
+          )}
         </>
       ) : (
         <Templates />

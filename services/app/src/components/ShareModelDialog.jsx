@@ -18,11 +18,11 @@ const ShareModelDialog = ({
   openShareModelDialog,
   handleOnClickCloseShareModelDialog,
   selectedSpreadsheet,
-  checked,
-  setChecked
+  fetchNewSpreadsheet
 }) => {
   const [copiedText, setCopiedText] = useState()
   const { getAccessToken } = useAuth()
+  const checked = selectedSpreadsheet.globalPublicEntitlements?.isPublic
 
   const updateSharedSpreadsheet = async spreadsheet => {
     const token = await getAccessToken()
@@ -32,17 +32,20 @@ const ShareModelDialog = ({
     await api.saveSpreadsheet(
       {
         ...response.data.spreadsheet,
-        globalPublicEntitlements: {
-          isPublic: true,
-          entitlements: 'read'
-        }
+
+        globalPublicEntitlements: checked
+          ? null
+          : {
+              isPublic: true,
+              entitlements: 'read'
+            }
       },
       accessToken
     )
+    await fetchNewSpreadsheet(spreadsheet._id)
   }
 
-  const handleOnChangeSwitch = spreadsheet => async e => {
-    setChecked(e.target.checked)
+  const handleOnChangeSwitch = spreadsheet => async () => {
     await updateSharedSpreadsheet(spreadsheet)
   }
 
@@ -100,9 +103,9 @@ const ShareModelDialog = ({
           </Grid>
           <Grid item>
             <Switch
-              checked={checked}
+              checked={checked ?? false}
               sx={{ display: 'flex', alignItems: 'center' }}
-              onClick={handleOnChangeSwitch(selectedSpreadsheet)}
+              onChange={handleOnChangeSwitch(selectedSpreadsheet)}
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </Grid>
