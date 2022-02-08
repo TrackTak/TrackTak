@@ -41,6 +41,6 @@
   left: 0;
 }
 
-.financial-spreadsheet.readonly .powersheet-toolbar {
-  display: none;
+.tippy-new-tag {
+  position: relative;
 }
