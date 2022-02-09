@@ -44,3 +44,7 @@
 .tippy-new-tag {
   position: relative;
 }
+
+.financial-spreadsheet.readonly .powersheet-toolbar {
+  display: none;
+}

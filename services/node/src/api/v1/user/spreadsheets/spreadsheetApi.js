@@ -45,17 +45,9 @@ export const getSpreadsheetsMetadata = async userId => {
   )
 }
 
-export const getGlobalSharedSpreadsheet = async (id, userId) => {
+export const getSpreadsheet = async id => {
   return database.findOne(Collections.POWERSHEET_SPREADSHEET, {
-    _id: new MongoDb.ObjectId(id),
-    userId
-  })
-}
-
-export const getSpreadsheet = async (id, userId) => {
-  return database.findOne(Collections.POWERSHEET_SPREADSHEET, {
-    _id: new MongoDb.ObjectId(id),
-    userId
+    _id: new MongoDb.ObjectId(id)
   })
 }
 

@@ -6,7 +6,6 @@ import {
   Grid,
   Modal,
   Switch,
-  Tooltip,
   Typography
 } from '@mui/material'
 import React, { useState } from 'react'
@@ -121,21 +120,15 @@ const ShareModelDialog = ({
             paddingLeft='15px'
             paddingRight='15px'
           >
-            <Tooltip
-              title={copiedText ? 'Copied!' : 'Copy To Clipboard'}
-              placement='top'
-              arrow
+            <Button
+              variant='contained'
+              size='medium'
+              startIcon={<ContentCopyIcon />}
+              sx={{ textTransform: 'none' }}
+              onClick={handleOnClickCopy}
             >
-              <Button
-                variant='contained'
-                size='medium'
-                startIcon={<ContentCopyIcon />}
-                sx={{ textTransform: 'none' }}
-                onClick={handleOnClickCopy}
-              >
-                Copy
-              </Button>
-            </Tooltip>
+              {copiedText ? 'Copied!' : 'Copy'}
+            </Button>
           </Grid>
         ) : null}
       </Box>
