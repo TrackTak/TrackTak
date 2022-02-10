@@ -79,16 +79,21 @@ export const getPlugin = dataGetter => {
       const metadata = this.metadata('SPREADSHEET_SET_NAME')
 
       return this.runAsyncFunction(ast.args, state, metadata, async name => {
+        const spreadsheet = dataGetter().spreadsheetData
+
+        if (!name) {
+          return spreadsheet.sheetData.name
+        }
+
+        if (name === spreadsheet.sheetData.name) {
+          return name
+        }
+
         const token = await dataGetter().getAccessToken()
-        const spreadsheet = await dataGetter().spreadsheetData
 
-        await api.updateSpreadsheetName(
-          spreadsheet._id,
-          name ?? spreadsheet.sheetData.name,
-          token?.jwtToken
-        )
+        await api.updateSpreadsheetName(spreadsheet._id, name, token?.jwtToken)
 
-        return `Dynamically updating spreadsheet name to ${name}`
+        return name
       })
     }
   }

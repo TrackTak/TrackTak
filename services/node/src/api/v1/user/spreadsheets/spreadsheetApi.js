@@ -74,8 +74,7 @@ export const updateSpreadsheetName = async (id, userId, name) => {
   return database.updateOne(
     Collections.POWERSHEET_SPREADSHEET,
     {
-      _id: new MongoDb.ObjectId(id),
-      userId
+      _id: new MongoDb.ObjectId(id)
     },
     { $set: { 'sheetData.name': name } }
   )

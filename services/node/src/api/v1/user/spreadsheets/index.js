@@ -21,9 +21,9 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/', async (req, res) => {
-  const spreadsheet = await updateSpreadsheet(req.body)
+  await updateSpreadsheet(req.body)
 
-  res.send({ spreadsheet })
+  res.sendStatus(200)
 })
 
 router.get('/:id', async (req, res) => {
@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   await deleteSpreadsheet(req.params.id)
 
-  res.send({ id: req.params.id })
+  res.sendStatus(200)
 })
 
 export default router
