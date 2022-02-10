@@ -7,10 +7,13 @@ import registerSharedFunctions from './registerSharedFunctions'
 import * as autocompletePlugin from './plugins/autocomplete/plugin'
 import * as dataAnalysisPlugin from './plugins/dataAnalysis/plugin'
 import getNewFeatureTooltip from './getNewFeatureTooltip'
+import { useAuth } from '@tracktak/common/src/hooks/useAuth'
 
 const FinancialSpreadsheet = ({ spreadsheetData, saveSheetData, sx }) => {
   const [spreadsheet, setSpreadsheet] = useState()
   const [containerEl, setContainerEl] = useState()
+  const { getAccessToken } = useAuth()
+
   const name = spreadsheetData?.sheetData.name
 
   useEffect(() => {
@@ -29,7 +32,9 @@ const FinancialSpreadsheet = ({ spreadsheetData, saveSheetData, sx }) => {
         apiFrozenTimestamp,
         spreadsheetCreationDate: new Date(spreadsheetData.createdTimestamp),
         currentCellText: spreadsheet.sheets.cellEditor.currentCellText,
-        spreadsheet
+        spreadsheet,
+        spreadsheetData,
+        getAccessToken
       }
     }
 
@@ -131,7 +136,7 @@ const FinancialSpreadsheet = ({ spreadsheetData, saveSheetData, sx }) => {
         newFeatureTooltip.destroy()
       }
     }
-  }, [spreadsheetData])
+  }, [getAccessToken, spreadsheetData])
 
   useEffect(() => {
     const persistData = async (data, done) => {

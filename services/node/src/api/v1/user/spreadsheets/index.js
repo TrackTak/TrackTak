@@ -26,15 +26,6 @@ router.put('/', async (req, res) => {
   res.send({ spreadsheet })
 })
 
-router.put('/:id', async (req, res) => {
-  const spreadsheet = await updateSpreadsheetFolder(
-    req.params.id,
-    req.body.folderId
-  )
-
-  res.send({ spreadsheet })
-})
-
 router.get('/:id', async (req, res) => {
   const spreadsheet = await getSpreadsheet(req.params.id)
 

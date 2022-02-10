@@ -70,6 +70,17 @@ export const getSpreadsheetsInFolder = async folderId => {
   )
 }
 
+export const updateSpreadsheetName = async (id, userId, name) => {
+  return database.updateOne(
+    Collections.POWERSHEET_SPREADSHEET,
+    {
+      _id: new MongoDb.ObjectId(id),
+      userId
+    },
+    { $set: { 'sheetData.name': name } }
+  )
+}
+
 export const updateSpreadsheetFolder = async (id, folderId) => {
   return database.updateOne(
     Collections.POWERSHEET_SPREADSHEET,

@@ -145,10 +145,20 @@ export const updateFolder = async (id, name, accessToken) => {
 
 export const updateSpreadsheetFolder = async (id, folderId, accessToken) => {
   return axios.put(
-    `/api/v1/user/spreadsheets/${id}`,
+    `/api/v1/user/spreadsheets/metadata/folder/${id}`,
     {
       folderId
     },
+    {
+      headers: getAuthHeaders(accessToken)
+    }
+  )
+}
+
+export const updateSpreadsheetName = async (id, name, accessToken) => {
+  return axios.put(
+    `/api/v1/user/spreadsheets/metadata/name/${id}`,
+    { name },
     {
       headers: getAuthHeaders(accessToken)
     }
