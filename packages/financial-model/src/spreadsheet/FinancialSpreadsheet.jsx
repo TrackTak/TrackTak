@@ -60,7 +60,10 @@ const FinancialSpreadsheet = ({ spreadsheetData, saveSheetData, sx }) => {
       ...registerSharedFunctions(dataGetter)
     ]
 
-    const spreadsheet = buildPowersheet(sheets, allPlugins)
+    const spreadsheet = buildPowersheet(
+      sheets,
+      allPlugins.map(x => x.plugin)
+    )
 
     spreadsheet.hyperformula.batch(() => {
       for (const sheetName in sheets) {
