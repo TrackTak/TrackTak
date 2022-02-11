@@ -53,6 +53,10 @@ const ShareModelDialog = ({
     await navigator.clipboard.writeText(sharedSpreadsheet)
 
     setCopiedText(sharedSpreadsheet)
+
+    setTimeout(() => {
+      setCopiedText()
+    }, 1000)
   }
 
   return (
