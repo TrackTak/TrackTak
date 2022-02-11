@@ -1608,5 +1608,26 @@
       }
     ],
     "attributes": []
+  },
+  "SPREADSHEET_SET_DEFAULT_NAME": {
+    "header": "SPREADSHEET_SET_DEFAULT_NAME",
+    "headerDescription": "Sets the spreadsheet current name to the value passed in. This is useful when you want to set a default spreadsheet name for users of this template so they don't have to rename it manually.",
+    "type": "Helpers",
+    "parameters": ["spreadsheetName"],
+    "codeSyntaxUsage": [
+      "=SPREADSHEET_SET_DEFAULT_NAME(\"AMZN Valuation\")"
+    ],
+    "codeSyntaxElements": [
+      {
+        "codeSyntax": "=SPREADSHEET_SET_DEFAULT_NAME(spreadsheetName)",
+        "values": [
+          {
+            "syntaxName": "spreadsheetName",
+            "description": "The name of the spreadsheet to change it to. If the value is empty or the user has manually edited the spreadsheet name then it will not update the name."
+          }
+        ]
+      }
+    ],
+    "attributes": []
   }
 }

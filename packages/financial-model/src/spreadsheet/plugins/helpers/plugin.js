@@ -3,6 +3,7 @@ import { ArgumentTypes } from '@tracktak/hyperformula/es/interpreter/plugin/Func
 import getSymbolFromCurrency from 'currency-symbol-map'
 import { currencyCodeCellError } from './cellErrors'
 import { timeToNumber } from '../helpers'
+import * as api from '@tracktak/common/src/api/api'
 
 export const implementedFunctions = {
   CONVERT_CURRENCY_CODE_TO_SYMBOL: {
@@ -17,13 +18,23 @@ export const implementedFunctions = {
     method: 'spreadsheetCreationDate',
     parameters: [],
     returnNumberType: 'NUMBER_DATETIME'
+  },
+  SPREADSHEET_SET_NAME: {
+    method: 'spreadsheetSetName',
+    isAsyncMethod: true,
+    parameters: [
+      {
+        argumentType: ArgumentTypes.STRING
+      }
+    ]
   }
 }
 
 export const translations = {
   enGB: {
     CONVERT_CURRENCY_CODE_TO_SYMBOL: 'CONVERT_CURRENCY_CODE_TO_SYMBOL',
-    SPREADSHEET_CREATION_DATE: 'SPREADSHEET_CREATION_DATE'
+    SPREADSHEET_CREATION_DATE: 'SPREADSHEET_CREATION_DATE',
+    SPREADSHEET_SET_NAME: 'SPREADSHEET_SET_NAME'
   }
 }
 
@@ -61,6 +72,28 @@ export const getPlugin = dataGetter => {
             day: date.getDate()
           })
         )
+      })
+    }
+
+    spreadsheetSetName(ast, state) {
+      const metadata = this.metadata('SPREADSHEET_SET_NAME')
+
+      return this.runAsyncFunction(ast.args, state, metadata, async name => {
+        const spreadsheet = dataGetter().spreadsheetData
+
+        if (!name) {
+          return spreadsheet.sheetData.name
+        }
+
+        if (name === spreadsheet.sheetData.name) {
+          return name
+        }
+
+        const token = await dataGetter().getAccessToken()
+
+        await api.updateSpreadsheetName(spreadsheet._id, name, token?.jwtToken)
+
+        return name
       })
     }
   }

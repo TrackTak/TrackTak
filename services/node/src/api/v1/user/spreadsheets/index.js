@@ -3,7 +3,7 @@ import {
   createSpreadsheet,
   deleteSpreadsheet,
   getSpreadsheet,
-  updateSpreadsheet,
+  updateSpreadsheetData,
   updateSpreadsheetFolder
 } from './spreadsheetApi'
 
@@ -20,19 +20,10 @@ router.post('/', async (req, res) => {
   res.send({ spreadsheet })
 })
 
-router.put('/', async (req, res) => {
-  const spreadsheet = await updateSpreadsheet(req.body)
+router.patch('/data/:id', async (req, res) => {
+  await updateSpreadsheetData(req.params.id, req.user.username, req.body.data)
 
-  res.send({ spreadsheet })
-})
-
-router.put('/:id', async (req, res) => {
-  const spreadsheet = await updateSpreadsheetFolder(
-    req.params.id,
-    req.body.folderId
-  )
-
-  res.send({ spreadsheet })
+  res.sendStatus(200)
 })
 
 router.get('/:id', async (req, res) => {
@@ -44,7 +35,7 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   await deleteSpreadsheet(req.params.id)
 
-  res.send({ id: req.params.id })
+  res.sendStatus(200)
 })
 
 export default router

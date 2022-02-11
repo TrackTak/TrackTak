@@ -13,21 +13,18 @@ export const createSpreadsheet = async (sheetData, userId) => {
   return database.insert(Collections.POWERSHEET_SPREADSHEET, document)
 }
 
-export const updateSpreadsheet = async spreadsheet => {
-  const document = {
-    ...spreadsheet,
-    lastModifiedTimestamp: new Date()
-  }
+export const updateSpreadsheetData = async (id, userId, data) => {
   const query = {
-    _id: spreadsheet._id
+    _id: new MongoDb.ObjectId(id),
+    userId
   }
 
-  return database.replace(
-    Collections.POWERSHEET_SPREADSHEET,
-    query,
-    document,
-    spreadsheet._id
-  )
+  return database.updateOne(Collections.POWERSHEET_SPREADSHEET, query, {
+    $set: {
+      'sheetData.data': data,
+      lastModifiedTimestamp: new Date()
+    }
+  })
 }
 
 export const getSpreadsheetsMetadata = async userId => {
@@ -67,6 +64,17 @@ export const getSpreadsheetsInFolder = async folderId => {
         'sheetData.data': 0
       }
     }
+  )
+}
+
+export const updateSpreadsheetName = async (id, userId, name) => {
+  return database.updateOne(
+    Collections.POWERSHEET_SPREADSHEET,
+    {
+      _id: new MongoDb.ObjectId(id),
+      userId
+    },
+    { $set: { 'sheetData.name': name } }
   )
 }
 
