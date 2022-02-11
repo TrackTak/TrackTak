@@ -144,7 +144,7 @@ export const updateFolder = async (id, name, accessToken) => {
 }
 
 export const updateSpreadsheetFolder = async (id, folderId, accessToken) => {
-  return axios.put(
+  return axios.patch(
     `/api/v1/user/spreadsheets/metadata/folder/${id}`,
     {
       folderId
@@ -156,7 +156,7 @@ export const updateSpreadsheetFolder = async (id, folderId, accessToken) => {
 }
 
 export const updateSpreadsheetName = async (id, name, accessToken) => {
-  return axios.put(
+  return axios.patch(
     `/api/v1/user/spreadsheets/metadata/name/${id}`,
     { name },
     {
@@ -190,10 +190,14 @@ export const createSpreadsheet = async (spreadsheet, folderId, accessToken) => {
   )
 }
 
-export const saveSpreadsheet = async (spreadsheet, accessToken) => {
-  return axios.put('/api/v1/user/spreadsheets', spreadsheet, {
-    headers: getAuthHeaders(accessToken)
-  })
+export const updateSpreadsheetData = async (id, data, accessToken) => {
+  return axios.patch(
+    `/api/v1/user/spreadsheets/data/${id}`,
+    { data },
+    {
+      headers: getAuthHeaders(accessToken)
+    }
+  )
 }
 
 export const getSpreadsheet = async (id, accessToken) => {

@@ -66,19 +66,12 @@ const SavedSpreadsheets = () => {
 
   const updateSpreadsheetName = async spreadsheet => {
     const token = await getAccessToken()
-    const accessToken = token?.jwtToken
-    const response = await api.getSpreadsheet(spreadsheet._id, token?.jwtToken)
 
-    await api.saveSpreadsheet(
-      {
-        ...response.data.spreadsheet,
-        sheetData: {
-          ...response.data.spreadsheet.sheetData,
-          name: name ?? spreadsheet.sheetData.name
-        }
-      },
-      accessToken
-    )
+    if (!name || name === spreadsheet.sheetData.name) {
+      return
+    }
+
+    await api.updateSpreadsheetName(spreadsheet._id, name, token?.jwtToken)
     await fetchNewSpreadsheets()
 
     setCurrentEditableSpreadsheetId(null)
